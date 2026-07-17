@@ -26,11 +26,10 @@ module.exports = {
                     { name: 'unban', value: 'unban' },
                     { name: 'kick', value: 'kick' }, 
                     { name: 'تقييم', value: 'rate' },
-                    { name: 'user', value: 'user' },
-                    { name: 'avatar', value: 'avatar' },
-                    { name: 'banner', value: 'banner' },
-                    { name: 'nickname', value: 'nickname' },
-                    { name: 'role', value: 'role' } // دعم role
+                    { name: 'user', value: 'user' },   // إضافة اختصار user
+                    { name: 'avatar', value: 'avatar' }, // إضافة اختصار avatar
+                    { name: 'banner', value: 'banner' }, // إضافة اختصار banner
+                    { name: 'nickname', value: 'nickname' } // إضافة اختصار nickname
                 )
         )
         .addStringOption(option => 
@@ -44,31 +43,12 @@ module.exports = {
             const command = interaction.options.getString('command');
             const shortcut = interaction.options.getString('shortcut');
 
-            // لو الأمر role، نخزن زي باقي الأوامر ونظهر طريقة الاستخدام
-            if (command === "role") {
-                await shortcutDB.set(`${command}_cmd_${interaction.guild.id}`, shortcut);
-
-                return interaction.reply({
-                    content:
-`✅ **تم تحديد اختصار للرول بنجاح: \`${shortcut}\`**
-
-**طريقة الاستخدام:**
-\`\`\`
-${shortcut} @user @role   <- استخدم منشن
-${shortcut} userID roleID <- أو استخدم الـ ID
-\`\`\``
-                });
-            }
-
-            // باقي الأوامر تخزن كـ string عادي
             await shortcutDB.set(`${command}_cmd_${interaction.guild.id}`, shortcut);
 
-            return interaction.reply({ 
-                content: `✅ **تم تحديد اختصار للأمر \`${command}\` بنجاح: \`${shortcut}\`**` 
-            });
+            return interaction.reply({ content: `**تم تحديد اختصار للأمر \`${command}\` بنجاح: \`${shortcut}\`**` });
         } catch (error) {
             console.error(error);
-            return interaction.reply({ content: `❌ حدث خطأ ما، حاول مرة أخرى.`, ephemeral: true });
+            return interaction.reply({ content: `حدث خطأ ما، حاول مرة أخرى.`, ephemeral: true });
         }
     }
 };

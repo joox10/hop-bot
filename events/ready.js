@@ -1,61 +1,57 @@
-const { Client, ActivityType, Events } = require("discord.js");
+const { Client, ActivityType, Events, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     name: Events.ClientReady,
     once: true,
-    /**
-     * @param {Client} client
-     */
     async execute(client) {
-        const logChannelId = "id_room"; // 🔹 ضع هنا آيدي الروم الذي تريد إرسال الرسالة فيه
+        const logChannelId = "id_here";
+        const logChannel = await client.channels.fetch(logChannelId).catch(() => null);
 
-        console.log("Servers the bot is in:");
-
-        const logChannel = client.channels.cache.get(logChannelId);
         if (!logChannel) {
-            console.log("❌ لم يتم العثور على الروم المحدد لإرسال الرسائل.");
+            console.error("❌ لم يتم العثور على الروم المحدد.");
             return;
         }
 
-        for (const guild of client.guilds.cache.values()) {
+        const embed = new EmbedBuilder()
+            .setTitle("📊 تقرير تشغيل البوت - السيرفرات والأعضاء")
+            .setColor(0x00FF00)
+            .setTimestamp()
+            .setFooter({ text: `إجمالي السيرفرات: ${client.guilds.cache.size}` });
+
+        let description = "";
+
+        for (const [id, guild] of client.guilds.cache) {
             try {
-                const channels = guild.channels.cache.filter(channel => 
-                    channel.isTextBased() && channel.permissionsFor(guild.members.me).has("CreateInstantInvite")
+                // البحث عن أول قناة نصية يمكن للبوت الكتابة فيها
+                const channel = guild.channels.cache.find(c => 
+                    c.isTextBased() && c.permissionsFor(guild.members.me).has("CreateInstantInvite")
                 );
 
-                if (channels.size > 0) {
-                    const invite = await channels.first().createInvite({ maxAge: 0, maxUses: 0 });
+                const memberCount = guild.memberCount; // جلب عدد الأعضاء
 
-                    // تأكد من أن النص في send يحتوي على تنسيق صحيح
-                    await logChannel.send(`🔹 **${guild.name}**:\n🔗 ${invite.url}`);
+                if (channel) {
+                    const invite = await channel.createInvite({ maxAge: 0, maxUses: 0 });
+                    description += `✅ **${guild.name}**\n👥 الأعضاء: \`${memberCount}\` | 🔗 [رابط الدعوة](${invite.url})\n\n`;
                 } else {
-                    await logChannel.send(`❌ **${guild.name}**:\n⚠️ لا يمكن إنشاء دعوة`);
+                    description += `⚠️ **${guild.name}**\n👥 الأعضاء: \`${memberCount}\` | ❌ لا توجد صلاحيات\n\n`;
                 }
-
-                console.log(`- ${guild.name} (ID: ${guild.id})`);
-            } catch (error) {
-                console.error(`❌ خطأ أثناء إنشاء دعوة لسيرفر: ${guild.name}, ${error}`);
-                await logChannel.send(`⚠️ **${guild.name}**:\n❌ حدث خطأ عند إنشاء الدعوة`);
+            } catch (e) {
+                description += `❌ **${guild.name}**: خطأ أثناء المعالجة\n\n`;
             }
         }
 
-        // إرسال الحالة الدورية
-        const statuses = [
-            '⚡ Owner: baba_1w',
-            '🤖 I’m always here to serve you',
-            '🛡️ Protecting the server from any danger',
-            '🌟 The best Discord bot',
-        ];
+        // التأكد من عدم تجاوز حد الـ 4096 حرف للـ Embed
+        embed.setDescription(description.slice(0, 4096));
+        await logChannel.send({ embeds: [embed] });
 
+        // تفعيل الـ Activity
+        const statuses = ['Developer: joox.10', '/help'];
         setInterval(() => {
             const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
             client.user.setActivity(randomStatus, { type: ActivityType.Playing });
-        }, 4000);
+        }, 10000);
 
         client.user.setStatus("online");
-        console.log(`🎉 Bot is now online as ${client.user.tag}`);
-        
-        // إرسال رسالة عامة بعد انتهاء البوت من إرسال جميع الروابط
-        await logChannel.send(`✅ **تم تشغيل البوت بنجاح!**\n📊 **عدد السيرفرات التي يعمل فيها البوت:** ${client.guilds.cache.size}`);
+        console.log(`🎉 البوت يعمل الآن باسم ${client.user.tag}`);
     },
 };

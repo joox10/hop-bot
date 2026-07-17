@@ -36,11 +36,10 @@ async execute(interaction) {
         )
 
         const btns3 = new ActionRowBuilder().addComponents(
-            new ButtonBuilder().setCustomId('help_broadcast').setLabel('برودكاست').setStyle(ButtonStyle.Secondary).setEmoji('📢'),
             new ButtonBuilder().setCustomId('help_nadeko').setLabel('ناديكو').setStyle(ButtonStyle.Secondary).setEmoji('⏳'),
             new ButtonBuilder().setCustomId('help_autoreply').setLabel('رد تلقائي').setStyle(ButtonStyle.Secondary).setEmoji('💎'),
-           new ButtonBuilder().setCustomId('help_public').setLabel(' اوامر عامه').setStyle(ButtonStyle.Secondary).setEmoji('💻'),
- new ButtonBuilder().setCustomId('help_autorole').setLabel('رتب تلقائية').setStyle(ButtonStyle.Secondary).setEmoji('⚡'),
+            new ButtonBuilder().setCustomId('help_public').setLabel(' اوامر عامه').setStyle(ButtonStyle.Secondary).setEmoji('💻'),
+            new ButtonBuilder().setCustomId('help_autorole').setLabel('رتب تلقائية').setStyle(ButtonStyle.Secondary).setEmoji('⚡'),
         )
 
         await interaction.editReply({embeds : [embed] , components : [btns1 , btns2 , btns3]});

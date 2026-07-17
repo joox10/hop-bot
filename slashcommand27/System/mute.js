@@ -1,18 +1,21 @@
 const { PermissionsBitField, SlashCommandBuilder } = require("discord.js");
+const { Database } = require("st.db");
 const ms = require("ms");
+
+const systemDB = new Database("/Json-db/Bots/systemDB.json");
 
 module.exports = {
     ownersOnly: false,
     data: new SlashCommandBuilder()
         .setName('mute')
-        .setDescription('إعطاء تايم اوت لشخص أو إزالته')
+        .setDescription('إعطاء ميوت لشخص أو إزالته')
         .addUserOption(option => option
             .setName('member')
             .setDescription('الشخص')
             .setRequired(true))
         .addStringOption(option => option
             .setName('give_or_remove')
-            .setDescription('إعطاء أو إزالة التايم اوت')
+            .setDescription('إعطاء أو إزالة الميوت')
             .setRequired(true)
             .addChoices(
                 { name: 'Give', value: 'Give' },
@@ -20,74 +23,82 @@ module.exports = {
             ))
         .addStringOption(option => option
             .setName('duration')
-            .setDescription('مدة التايم اوت (مثلاً: 10m, 1h, 1d)')
+            .setDescription('مدة الميوت (مثلاً: 10m, 1h, 1d)')
             .setRequired(false)),
 
     async execute(interaction) {
         try {
-            if (!interaction.member.permissions.has(PermissionsBitField.Flags.ModerateMembers)) {
-                return interaction.reply({ content: '🚫 لا تمتلك صلاحية لفعل ذلك', ephemeral: true });
+            if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageRoles)) {
+                return interaction.reply({ content: `🚫 **لا تمتلك صلاحية لفعل ذلك!**`, ephemeral: true });
             }
 
             const member = interaction.options.getMember('member');
-            const action = interaction.options.getString('give_or_remove');
+            const give_or_remove = interaction.options.getString('give_or_remove');
             const duration = interaction.options.getString('duration');
 
-            if (!member) {
-                return interaction.reply({ content: '❌ العضو غير موجود', ephemeral: true });
-            }
-
-            // منع تايم اوت عن مالك السيرفر
+            // منع كتم مالك السيرفر
             if (member.id === interaction.guild.ownerId) {
-                return interaction.reply({ content: '⚠️ لا يمكن إعطاء تايم اوت لمالك السيرفر', ephemeral: true });
+                return interaction.reply({ content: `⚠️ **لا يمكنك إعطاء ميوت لمالك السيرفر!**`, ephemeral: true });
             }
 
-            // منع معاقبة شخص أعلى منك
-            if (member.roles.highest.position >= interaction.member.roles.highest.position) {
-                return interaction.reply({ content: '🚫 لا يمكنك معاقبة شخص أعلى منك رتبة', ephemeral: true });
+            // منع كتم أعضاء أعلى من البوت
+            if (member.roles.highest.position >= interaction.guild.members.me.roles.highest.position) {
+                return interaction.reply({ content: `⚠️ **لا يمكنني كتم هذا الشخص، رتبته أعلى مني!**`, ephemeral: true });
             }
 
-            // ===== إزالة التايم اوت =====
-            if (action === "Remove") {
-                if (!member.communicationDisabledUntil) {
-                    return interaction.reply({ content: '⚠️ هذا الشخص ليس عليه تايم اوت', ephemeral: true });
+            let muteRoleId = systemDB.get("muteRole");
+            let muteRole = interaction.guild.roles.cache.get(muteRoleId) || interaction.guild.roles.cache.find(ro => ro.name == "Muted");
+
+            if (!muteRole) {
+                muteRole = await interaction.guild.roles.create({
+                    name: `Muted`,
+                    permissions: []
+                });
+
+                interaction.guild.channels.cache.forEach(channel => {
+                    channel.permissionOverwrites.edit(muteRole, { SendMessages: false });
+                });
+
+                systemDB.set("muteRole", muteRole.id);
+            }
+
+            if (give_or_remove == "Give") {
+                await member.roles.add(muteRole).catch(() => {
+                    return interaction.reply({ content: `⚠️ **الرجاء التحقق من صلاحياتي ثم إعادة المحاولة!**`, ephemeral: true });
+                });
+
+                if (duration) {
+                    const muteDuration = ms(duration);
+                    if (!muteDuration) {
+                        return interaction.reply({ content: `⚠️ **المدة غير صحيحة! يرجى استخدام (مثلاً: 10m, 1h, 1d)**`, ephemeral: true });
+                    }
+
+                    setTimeout(async () => {
+                        await member.roles.remove(muteRole);
+                        member.send(`🔊 **تم فك الميوت عنك في ${interaction.guild.name}!**`).catch(() => { });
+                        interaction.channel.send(`🔊 **تم فك الميوت عن ${member.user.tag} بعد انتهاء المدة!**`);
+                    }, muteDuration);
                 }
 
-                await member.timeout(null);
-                member.send(`🔊 تم فك التايم اوت عنك في ${interaction.guild.name}`).catch(() => {});
+                member.send(`🔇 **تم إعطاؤك ميوت في ${interaction.guild.name}!**`).catch(() => { });
+                return interaction.reply({ content: `✅ **تم إعطاء الميوت إلى ${member.user.tag} بنجاح!** 🔇` });
 
-                return interaction.reply({ content: `✅ تم فك التايم اوت عن ${member.user.tag}` });
-            }
+            } else if (give_or_remove == "Remove") {
+                if (!member.roles.cache.has(muteRole.id)) {
+                    return interaction.reply({ content: `⚠️ **هذا الشخص لا يمتلك ميوت لإزالته!**`, ephemeral: true });
+                }
 
-            // ===== إعطاء تايم اوت =====
-            if (!duration) {
-                return interaction.reply({ content: '⚠️ يجب تحديد مدة التايم اوت', ephemeral: true });
-            }
-
-            const timeMs = ms(duration);
-            if (!timeMs) {
-                return interaction.reply({
-                    content: '⚠️ مدة غير صحيحة (مثال: 10m, 1h, 1d)',
-                    ephemeral: true
+                await member.roles.remove(muteRole).catch(() => {
+                    return interaction.reply({ content: `⚠️ **الرجاء التحقق من صلاحياتي ثم إعادة المحاولة!**`, ephemeral: true });
                 });
+
+                member.send(`🔊 **تم إزالة الميوت عنك في ${interaction.guild.name}!**`).catch(() => { });
+                return interaction.reply({ content: `✅ **تم إزالة الميوت من ${member.user.tag} بنجاح!** 🔊` });
             }
-
-            await member.timeout(timeMs, `By: ${interaction.user.tag}`);
-
-            member.send(
-                `🔇 تم إعطاؤك تايم اوت في ${interaction.guild.name}\n⏳ المدة: ${duration}`
-            ).catch(() => {});
-
-            return interaction.reply({
-                content: `✅ تم إعطاء تايم اوت لـ ${member.user.tag} لمدة ${duration}`
-            });
 
         } catch (error) {
+            interaction.reply({ content: `⚠️ **لقد حدث خطأ! يرجى الاتصال بالمطورين.**`, ephemeral: true });
             console.log(error);
-            interaction.reply({
-                content: '⚠️ حدث خطأ غير متوقع، تواصل مع المطورين',
-                ephemeral: true
-            });
         }
     }
 };
