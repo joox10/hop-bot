@@ -14,16 +14,11 @@ module.exports = {
         .addIntegerOption(option => option
             .setName('button-number')
             .setDescription('ترتيب الزرار في الرسالة من اليسار إلى اليمين (1، 2، 3...)')
-            .setRequired(true))
-        .addStringOption(option => option
-            .setName('new-content')
-            .setDescription('النص الجديد الذي سيظهر عند الضغط على الزر')
             .setRequired(true)),
 
     async execute(interaction) {
         const messageId = interaction.options.getString('message-id');
         const buttonNumber = interaction.options.getInteger('button-number');
-        const newContent = interaction.options.getString('new-content');
         const guildId = interaction.guild.id;
 
         try {
@@ -37,10 +32,8 @@ module.exports = {
             }
 
             const allButtons = targetMessage.components[0].components;
-
-            // التحقق من أن رقم الزرار المختار موجود فعلياً في الرسالة
-            // بنقص 1 لأن الـ Arrays بتبدأ من 0
             const buttonIndex = buttonNumber - 1; 
+
             if (buttonIndex < 0 || buttonIndex >= allButtons.length) {
                 return await interaction.reply({ 
                     content: `هذه الرسالة تحتوي على عدد (${allButtons.length}) أزرار فقط. يرجى اختيار رقم صحيح!`, 
@@ -48,7 +41,6 @@ module.exports = {
                 });
             }
 
-            // جلب الزرار المختار بناءً على الترتيب
             const selectedButton = allButtons[buttonIndex];
             const customId = selectedButton.customId; 
 
@@ -56,20 +48,40 @@ module.exports = {
                 return await interaction.reply({ content: 'الزر المختار ليس زر معلومات تابع لهذا النظام.', ephemeral: true });
             }
 
-            // استخراج الـ buttonId عن طريق حذف info_
             const buttonId = customId.replace('info_', '');
 
-            // التحديث في قاعدة البيانات st.db
-            await buttonsDB.set(`${guildId}_${buttonId}`, newContent);
+            await interaction.reply({ content: '**برجاء إرسال الرسالة الجديدة التي تريد ظهورها عند الضغط على الزر الآن في الشات...**', ephemeral: true });
 
-            return await interaction.reply({
+            const filter = m => m.author.id === interaction.user.id;
+            const collected = await interaction.channel.awaitMessages({ 
+                filter, 
+                max: 1, 
+                time: 60000, 
+                errors: ['time'] 
+            });
+
+            const userMessage = collected.first();
+            const newContent = userMessage.content;
+
+            await buttonsDB.set(`${guildId}_${buttonId}`, newContent);
+            await userMessage.delete().catch(() => {});
+
+            return await interaction.followUp({
                 content: `<:check:1527933632591691846> تم بنجاح تعديل الرسالة المرتبطة بالزرار رقم (**${buttonNumber}**) في قاعدة البيانات!`,
                 ephemeral: true
             });
 
         } catch (error) {
+            if (error.size === 0) {
+                return interaction.followUp({ content: '**انتهى الوقت (60 ثانية) ولم تقم بإرسال الرسالة الجديدة!**', ephemeral: true }).catch(() => {});
+            }
+
             console.error(error);
-            await interaction.reply({ content: 'حدث خطأ أثناء محاولة تعديل زر المعلومات.', ephemeral: true });
+            if (interaction.replied || interaction.deferred) {
+                return interaction.followUp({ content: 'حدث خطأ أثناء محاولة تعديل زر المعلومات.', ephemeral: true }).catch(() => {});
+            } else {
+                return interaction.reply({ content: 'حدث خطأ أثناء محاولة تعديل زر المعلومات.', ephemeral: true }).catch(() => {});
+            }
         }
     }
 };

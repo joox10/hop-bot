@@ -1,4 +1,8 @@
-const { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, Client, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ChatInputCommandInteraction, Client, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js");
+
+// المسارات دي متأكد منها بناء على مكان الملف: slashcommand27/General/help.js
+const getHelpCategories = require("../../helpCategories");
+const { prefix } = require("../../config.js");
 
 module.exports = {
     ownersOnly: false,
@@ -13,54 +17,43 @@ module.exports = {
         try {
             await interaction.deferReply();
 
-            // تصميم الـ Embed الاحترافي بلمسة تفاعلية
+            const categories = getHelpCategories(prefix);
+
             const embed = new EmbedBuilder()
-                .setAuthor({ 
-                    name: interaction.guild.name, 
-                    iconURL: interaction.guild.iconURL({ forceStatic: false }) 
+                .setAuthor({
+                    name: interaction.guild.name,
+                    iconURL: interaction.guild.iconURL({ forceStatic: false })
                 })
                 .setTitle('📋 لوحة التحكم والمساعدة')
                 .setDescription(
                     `<:hop:1527591995399209010> *أممم... دعني أرى ما الذي يمكنني مساعدتك به اليوم!*\n\n` +
-                    `> **يرجى اختيار القسم المراد معرفة أوامره من الأزرار بالأسفل.**`
+                    `> **يرجى اختيار القسم المراد معرفة أوامره من القائمة بالأسفل.**`
                 )
                 .addFields(
                     { name: ' إحصائيات سريعة', value: `\`\`\` | يحتوي البوت على أكثر من +90 أمر جاهز لخدمتك\`\`\`` }
                 )
                 .setTimestamp()
-                .setFooter({ 
-                    text: `Developed by joox.10 | Requested By ${interaction.user.username}`, 
-                    iconURL: interaction.user.displayAvatarURL({ forceStatic: false }) 
-                }) // تم إضافة توقيعك كمطور للبوت
-                .setColor('#2b2d31'); // لون رمادي غامق أنيق جداً يندمج مع خلفية ديسكورد
+                .setFooter({
+                    text: `Developed by joox.10 | Requested By ${interaction.user.username}`,
+                    iconURL: interaction.user.displayAvatarURL({ forceStatic: false })
+                })
+                .setColor('#2b2d31');
 
-            // الصف الأول من الأزرار
-            const btns1 = new ActionRowBuilder().addComponents(
-                new ButtonBuilder().setCustomId('help_tax').setLabel('ضريبة').setStyle(ButtonStyle.Secondary).setEmoji('💰'),
-                new ButtonBuilder().setCustomId('help_autoline').setLabel('خط تلقائي').setStyle(ButtonStyle.Secondary).setEmoji('🤖'),
-                new ButtonBuilder().setCustomId('help_suggestion').setLabel('اقتراحات').setStyle(ButtonStyle.Secondary).setEmoji('💡'),
-                new ButtonBuilder().setCustomId('help_feedback').setLabel('اراء').setStyle(ButtonStyle.Secondary).setEmoji('💭'),
-                new ButtonBuilder().setCustomId('help_system').setLabel('اوامر اداره').setStyle(ButtonStyle.Secondary).setEmoji('⚙️'),
-            );
+            const menu = new StringSelectMenuBuilder()
+                .setCustomId('help_menu')
+                .setPlaceholder('📂 اختر قسم لعرض أوامره')
+                .addOptions(
+                    categories.map(cat => ({
+                        label: cat.label,
+                        value: cat.id,
+                        emoji: cat.emoji,
+                        description: cat.selectDescription,
+                    }))
+                );
 
-            // الصف الثاني من الأزرار
-            const btns2 = new ActionRowBuilder().addComponents(
-                new ButtonBuilder().setCustomId('help_ticket').setLabel('تكت').setStyle(ButtonStyle.Secondary).setEmoji('🎫'),
-                new ButtonBuilder().setCustomId('help_giveaway').setLabel('جيف اوي').setStyle(ButtonStyle.Secondary).setEmoji('🎁'),
-                new ButtonBuilder().setCustomId('help_protection').setLabel('حماية').setStyle(ButtonStyle.Secondary).setEmoji('🛡️'),
-                new ButtonBuilder().setCustomId('help_logs').setLabel('لوج').setStyle(ButtonStyle.Secondary).setEmoji('📜'),
-                new ButtonBuilder().setCustomId('help_apply').setLabel('تقديمات').setStyle(ButtonStyle.Secondary).setEmoji('📝'),
-            );
+            const row = new ActionRowBuilder().addComponents(menu);
 
-            // الصف الثالث من الأزرار
-            const btns3 = new ActionRowBuilder().addComponents(
-                new ButtonBuilder().setCustomId('help_nadeko').setLabel('ناديكو').setStyle(ButtonStyle.Secondary).setEmoji('⏳'),
-                new ButtonBuilder().setCustomId('help_autoreply').setLabel('رد تلقائي').setStyle(ButtonStyle.Secondary).setEmoji('💎'),
-                new ButtonBuilder().setCustomId('help_public').setLabel('اوامر عامه').setStyle(ButtonStyle.Secondary).setEmoji('💻'),
-                new ButtonBuilder().setCustomId('help_autorole').setLabel('رتب تلقائية').setStyle(ButtonStyle.Secondary).setEmoji('⚡'),
-            );
-
-            await interaction.editReply({ embeds: [embed], components: [btns1, btns2, btns3] });
+            await interaction.editReply({ embeds: [embed], components: [row] });
         } catch (error) {
             console.log("🔴 | Error in help all in one bot", error);
         }
