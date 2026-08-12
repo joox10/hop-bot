@@ -51,7 +51,7 @@
 
 | القائمة التفاعلية | أوامر الإدارة |
 | :---: | :---: |
-| ![Menu](https://res.cloudinary.com/dke6pxph1/image/upload/v1776051056/discord_uploads/p7klcbe5w8ab0n7t7ong.png) | ![Commands](https://res.cloudinary.com/dke6pxph1/image/upload/v1776051680/discord_uploads/mxyfj2tuxubsatytmqjm.png) |
+| ![Menu](https://res.cloudinary.com/dke6pxph1/image/upload/v1786561829/discord_uploads/zyufmef3r2aeo5zyoflt.png) | ![Commands](https://res.cloudinary.com/dke6pxph1/image/upload/v1786562068/discord_uploads/lk1d9xpnbgynqjtvgj3y.png) |
 
 ---
 
