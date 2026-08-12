@@ -121,7 +121,9 @@ npm start
 * `st.db`: قاعدة بيانات خفيفة وسريعة التجاوب.
 * `cloudinary`: لرفع وإدارة الصور والخطوط السحابية.
 * `ascii-table`: لتنظيم وعرض الأوامر في الكونسول بشكل جدولي أنيق.
-
+```bash
 npm install discord.js st.db ascii-table cloudinary
+```
+
 ---
-**تم التطوير بواسطة مبرمج المشروع.**
+**Designed & Developed by [Joox](https://joox.is-a.dev)**
