@@ -7,12 +7,12 @@
  *
  * كل قسم شكله:
  * {
- *   id: 'system',                 // نفس القيمة الي هتتحط في select menu (لازم تكون فريدة)
+ *   id: 'system',                  // نفس القيمة الي هتتحط في select menu (لازم تكون فريدة)
  *   label: 'اوامر اداره',          // الاسم اللي يظهر في قائمة السلكت منيو
- *   emoji: '⚙️',                   // ايموجي القسم (تقدر تغيره لايموجي مخصص بتاع البوت)
+ *   emoji: '⚙️',                    // ايموجي القسم (تقدر تغيره لايموجي مخصص بتاع البوت)
  *   selectDescription: '...',      // وصف قصير جدا يظهر تحت الاسم في السلكت منيو (اقصى حد سطر واحد)
  *   title: '⚙️ أوامر الإدارة',      // عنوان الامبد لما يتم اختيار القسم
- *   embedDescription: '...',       // وصف قصير تحت عنوان الامبد
+ *   embedDescription: '...',        // وصف قصير تحت عنوان الامبد
  *   fields: [ { name, value }, ... ] // حقول الامبد (نفس فورمات addFields العادي)
  * }
  * ------------------------------------------------------------
@@ -24,12 +24,12 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'public',
             label: 'اوامر عامه',
-            emoji: '💻',
+            emoji: '<:public:1534179645379842139>',
             selectDescription: 'أوامر متاحة للجميع',
-            title: '💻 الأوامر العامة',
+            title: '<:public:1534179645379842139> الأوامر العامة',
             embedDescription: 'أوامر متاحة للجميع لاستخدامها بحرية',
             fields: [
-                { name: '👤 معلومات', value:
+                { name: '<:user:1534179858807132271> معلومات', value:
                     `\`/user\` — معلومات حسابك او حساب اخر\n` +
                     `\`/userinfo\` — معلومات مفصلة عن حساب\n` +
                     `\`/avatar\` — رؤية افتارك او افتار شخص اخر\n` +
@@ -37,13 +37,13 @@ module.exports = function getHelpCategories(prefix) {
                     `\`/server\` — معلومات السيرفر\n` +
                     `\`/botinfo\` — معلومات عن البوت`
                 },
-                { name: '🛠️ أدوات', value:
+                { name: '<:tools:1534180038801358970> أدوات', value:
                     `\`/uploadimage\` — رفع صورة والحصول على رابط دائم\n` +
                     `\`/copy-emoji\` — نسخ ايموجي من سيرفر اخر\n` +
                     `\`/ping\` — سرعة استجابة البوت\n` +
                     `\`/meme\` — جلب ميم عشوائي`
                 },
-                { name: '📎 أخرى', value:
+                { name: '<:linkalt:1534180171752411288> أخرى', value:
                     `\`/nickname\` — اعطاء اسم مستعار لشخص او ازالته\n` +
                     `\`/invite\` — رابط دعوة البوت\n` +
                     `\`/support\` — رابط سيرفر الدعم\n` +
@@ -56,9 +56,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'ticket',
             label: 'تكت',
-            emoji: '🎫',
+            emoji: '<:ticket:1534180398815248394>',
             selectDescription: 'إدارة نظام التذاكر',
-            title: '🎫 أوامر التكت',
+            title: '<:ticket:1534180398815248394> أوامر التكت',
             embedDescription: 'إدارة نظام التذاكر (تكت) في السيرفر',
             fields: [
                 { name: '\u200b', value:
@@ -79,9 +79,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'apply',
             label: 'تقديمات',
-            emoji: '📝',
+            emoji: '<:clipboard1:1534180497192783903>',
             selectDescription: 'إدارة نظام التقديمات',
-            title: '📝 أوامر التقديمات',
+            title: '<:clipboard1:1534180497192783903> أوامر التقديمات',
             embedDescription: 'إدارة نظام التقديمات في السيرفر',
             fields: [
                 { name: '\u200b', value:
@@ -97,9 +97,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'giveaway',
             label: 'جيف اوي',
-            emoji: '🎁',
+            emoji: '<:gift:1534180600322330765>',
             selectDescription: 'إدارة السحوبات',
-            title: '🎁 أوامر الجيف اوي',
+            title: '<:gift:1534180600322330765> أوامر الجيف اوي',
             embedDescription: 'إدارة السحوبات والجيف اوي',
             fields: [
                 { name: '\u200b', value:
@@ -114,9 +114,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'suggestion',
             label: 'اقتراحات',
-            emoji: '💡',
+            emoji: '<:bulb:1534180772473470976>',
             selectDescription: 'إدارة اقتراحات الأعضاء',
-            title: '💡 أوامر الاقتراحات',
+            title: '<:bulb:1534180772473470976> أوامر الاقتراحات',
             embedDescription: 'إدارة نظام استقبال اقتراحات الأعضاء',
             fields: [
                 { name: '\u200b', value:
@@ -131,9 +131,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'feedback',
             label: 'اراء',
-            emoji: '💭',
+            emoji: '<:opinion:1534180888575737887>',
             selectDescription: 'إدارة تقييمات الأعضاء',
-            title: '💭 أوامر الآراء',
+            title: '<:opinion:1534180888575737887> أوامر الآراء',
             embedDescription: 'إدارة نظام آراء وتقييمات الأعضاء',
             fields: [
                 { name: '\u200b', value:
@@ -150,9 +150,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'autoline',
             label: 'خط تلقائي',
-            emoji: '🤖',
+            emoji: '<:roboticsurgery:1534181414734397571>',
             selectDescription: 'إدارة الخط التلقائي',
-            title: '🤖 أوامر الخط التلقائي',
+            title: '<:roboticsurgery:1534181414734397571>أوامر الخط التلقائي',
             embedDescription: 'إدارة نظام الخط التلقائي في السيرفر',
             fields: [
                 { name: '\u200b', value:
@@ -169,9 +169,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'autoreply',
             label: 'رد تلقائي',
-            emoji: '💎',
+            emoji: '<:auto:1534181990000099449>',
             selectDescription: 'إدارة الردود التلقائية',
-            title: '💎 أوامر الرد التلقائي',
+            title: '<:auto:1534181990000099449> أوامر الرد التلقائي',
             embedDescription: 'إدارة نظام الردود التلقائية',
             fields: [
                 { name: '\u200b', value:
@@ -186,12 +186,15 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'autorole',
             label: 'رتب تلقائية',
-            emoji: '⚡',
-            selectDescription: 'إدارة بنلات الرتب',
-            title: '⚡ أوامر الرتب التلقائية',
-            embedDescription: 'إدارة بنلات الرتب التلقائية',
+            emoji: '<:roboticsurgery:1534181414734397571>',
+            selectDescription: 'إدارة الرتب التلقائية وبنلات الرتب',
+            title: '<:roboticsurgery:1534181414734397571> أوامر الرتب التلقائية',
+            embedDescription: 'إدارة رتب الدخول وبنلات التفاعل التلقائية',
             fields: [
                 { name: '\u200b', value:
+                    `\`/autorole set\` — تعيين رتبة الأعضاء أو البوتات عند الدخول\n` +
+                    `\`/autorole remove\` — إيقاف الرتبة التلقائية للأعضاء أو البوتات\n` +
+                    `\`/autorole-list\` — عرض قائمة الرتب التلقائية المفعلة في السيرفر\n` +
                     `\`/new-panel\` — انشاء بنل رتب جديد\n` +
                     `\`/add-button\` — اضافة زر جديد للرتبة`
                 },
@@ -202,9 +205,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'nadeko',
             label: 'ناديكو',
-            emoji: '⏳',
+            emoji: '<:notification:1534182220581965984>',
             selectDescription: 'إدارة رسائل ناديكو',
-            title: '⏳ أوامر ناديكو',
+            title: '<:notification:1534182220581965984> أوامر ناديكو',
             embedDescription: 'إدارة الرسائل والرومات المرتبطة بناديكو',
             fields: [
                 { name: '\u200b', value:
@@ -219,9 +222,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'tax',
             label: 'ضريبة',
-            emoji: '💰',
+            emoji: '<:taxes:1534182515286212668>',
             selectDescription: 'حساب وإدارة الضريبة',
-            title: '💰 أوامر الضريبة',
+            title: '<:taxes:1534182515286212668> أوامر الضريبة',
             embedDescription: 'كل ما يخص نظام الضريبة التلقائي وحسابها',
             fields: [
                 { name: '\u200b', value:
@@ -237,9 +240,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'logs',
             label: 'لوج',
-            emoji: '📜',
+            emoji: '<:log:1534182330103632043>',
             selectDescription: 'إدارة سجل الأحداث',
-            title: '📜 أوامر اللوج',
+            title: '<:log:1534182330103632043> أوامر اللوج',
             embedDescription: 'إدارة نظام تسجيل الأحداث (اللوج)',
             fields: [
                 { name: '\u200b', value:
@@ -253,9 +256,9 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'protection',
             label: 'حماية',
-            emoji: '🛡️',
+            emoji: '<:shield:1527931287275311154>',
             selectDescription: 'إدارة أنظمة الحماية',
-            title: '🛡️ أوامر الحماية',
+            title: '<:shield:1527931287275311154> أوامر الحماية',
             embedDescription: 'إدارة أنظمة حماية السيرفر',
             fields: [
                 { name: '\u200b', value:
@@ -273,18 +276,18 @@ module.exports = function getHelpCategories(prefix) {
         {
             id: 'system',
             label: 'اوامر اداره',
-            emoji: '⚙️',
+            emoji: '<:settings:1534182717548138506>',
             selectDescription: 'أوامر التحكم والإدارة',
-            title: '⚙️ أوامر الإدارة',
+            title: '<:settings:1534182717548138506> أوامر الإدارة',
             embedDescription: 'أوامر التحكم والإدارة الخاصة بالسيرفر',
             fields: [
-                { name: '📌 عام', value:
+                { name: '<:public:1534179645379842139> عام', value:
                     `\`/setup-welcome\` — تسطيب نظام الترحيب\n` +
                     `\`/add-info-button\` — اضافة زر معلومات\n` +
                     `\`/set-shortcut\` — لتحديد اختصار لأمر ما\n` +
                     `\`/automod\` — التحكم في نظام الحماية التلقائي (AutoMod)`
                 },
-                { name: '💬 الرسائل', value:
+                { name: '<:opinion:1534180888575737887> الرسائل', value:
                     `\`/say\` | \`${prefix}say\` — لقول كلام\n` +
                     `\`/embed\` — لقول كلام في ايمبد\n` +
                     `\`/send\` — لارسال رسالة لشخص ما\n` +
@@ -294,14 +297,14 @@ module.exports = function getHelpCategories(prefix) {
                     `\`/edit-button-info\` — تعديل رسالة زر معلومات\n` +
                     `\`/clear\` | \`${prefix}clear\` — لحذف عدد من الرسائل`
                 },
-                { name: '🚪 القنوات', value:
+                { name: '<:list:1534182998428094534>القنوات', value:
                     `\`/hide\` | \`${prefix}hide\` — لاخفاء روم\n` +
                     `\`/unhide\` | \`${prefix}unhide\` — لاظهار روم\n` +
                     `\`/hide-all\` — لاخفاء جميع القنوات\n` +
                     `\`/lock\` | \`${prefix}lock\` — لقفل روم\n` +
                     `\`/unlock\` | \`${prefix}unlock\` — لفتح روم`
                 },
-                { name: '👤 الأعضاء', value:
+                { name: '<:user:1534179858807132271> الأعضاء', value:
                     `\`/come\` | \`${prefix}come\` — لاستدعاء شخص\n` +
                     `\`/mute\` — لاعطاء ميوت لشخص او ازالته\n` +
                     `\`/timeout\` — لاعطاء تايم اوت لشخص او ازالته\n` +

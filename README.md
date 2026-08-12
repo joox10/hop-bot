@@ -1,116 +1,127 @@
-# HOP-Bot
+# ⚙️ HOP-Bot
 
-بوت ديسكورد متكامل لإدارة السيرفرات باحترافية عالية ⚙️  
-مصمم لتسهيل التحكم، الحماية، وتنظيم كل شيء داخل السيرفر.
-
----
-
-## ✨ Features | المميزات
-
-- 🤖 Auto Line System (خط تلقائي)
-- 🎫 Ticket System (نظام التذاكر)
-- 💡 Suggestions System (نظام الاقتراحات)
-- 🛡️ Protection System (نظام الحماية)
-- 🎮 Nadeko System (نظام ناديكو)
-- 💬 Auto Reply System (رد تلقائي)
-- 📊 Logs System (نظام اللوج)
-- 🎛️ Interactive Menu (منيو تفاعلي بالأزرار)
-- ⚡ أوامر Prefix + اختصارات
+> بوت ديسكورد متكامل لإدارة وحماية السيرفرات باحترافية. مصمم ليجمع بين الأداء العالي والتحكم الشامل في بيئة ديسكورد.
 
 ---
 
-## 📸 Preview | صور من البوت
-
-### 🎛️ Interactive Menu
-![Menu](https://res.cloudinary.com/dke6pxph1/image/upload/v1776051056/discord_uploads/p7klcbe5w8ab0n7t7ong.png)
-
-### 📜 Commands
-![Commands](https://res.cloudinary.com/dke6pxph1/image/upload/v1776051680/discord_uploads/mxyfj2tuxubsatytmqjm.png)
-
-### 📜 Commands
-![Commands](https://res.cloudinary.com/dke6pxph1/image/upload/v1776051728/discord_uploads/esyxontn94rdtkfzwiiw.png)
-
+## 📑 جدول المحتويات (Table of Contents)
+- [عن المشروع](#-عن-المشروع-about)
+- [المميزات والأنظمة](#-المميزات-والأنظمة-features)
+- [معاينة البوت](#-معاينة-البوت-preview)
+- [المتطلبات الأساسية](#-المتطلبات-الأساسية-prerequisites)
+- [التثبيت والإعداد](#-التثبيت-والإعداد-installation)
+- [التكوين والربط](#-التكوين-والربط-configuration)
+- [التشغيل](#-التشغيل-usage)
+- [الحزم المستخدمة](#-الحزم-المستخدمة-dependencies)
 
 ---
 
-## 🤖 Create Bot | إنشاء البوت
-
-1. ادخل: https://discord.com/developers/applications  
-2. اضغط New Application  
-3. ادخل قسم Bot → Add Bot  
-4. انسخ التوكن (TOKEN)  
-5. من OAuth2 → URL Generator:
-   - اختار: bot + applications.commands  
-   - ادِّي صلاحية Administrator  
-6. افتح الرابط وضيف البوت للسيرفر  
+## ⬛ عن المشروع (About)
+**HOP-Bot** هو مشروع برمجي متكامل مبني باستخدام `discord.js` و `Node.js`. يهدف إلى تقليل الحاجة لإضافة بوتات متعددة للسيرفر من خلال توفير جميع الأنظمة الأساسية (حماية، إدارة، تذاكر، تقديمات، وسحوبات) في مكان واحد، مع التركيز على سرعة الاستجابة وواجهة الاستخدام التفاعلية (Interactive Menus).
 
 ---
 
-## ⚙️ Setup | طريقة التشغيل
+## 🛠️ المميزات والأنظمة (Features)
 
-### 1. تحميل المشروع
+تم تقسيم أنظمة البوت لتغطية كافة احتياجات السيرفر:
+
+### 🛡️ أنظمة الحماية والإدارة
+* **نظام الحماية (Protection):** حماية متقدمة ضد البوتات الدخيلة، منع حذف الرومات أو الرتب، والحماية من الحظر العشوائي (Anti-Spam / Anti-Nuke).
+* **نظام السجل (Logs):** تسجيل دقيق لكافة الأحداث (حذف الرسائل، تعديل الرومات، أوامر الطرد والحظر).
+* **أوامر الإدارة (System):** أوامر سريعة للتحكم (قفل/فتح الرومات، مسح الشات، إخفاء الرومات).
+
+### 🎫 أنظمة التذاكر والتقديم
+* **نظام التذاكر (Tickets):** إنشاء تذاكر متطورة تدعم القوائم المنسدلة (Select Menus) لتوجيه الأعضاء للقسم الصحيح.
+* **نظام التقديم (Apply):** استقبال طلبات الانضمام للإدارة عبر نماذج تفاعلية داخل السيرفر.
+
+### 💬 أنظمة التفاعل والتواصل
+* **نظام ناديكو (Nadeko):** رسائل ترحيب تفاعلية عند دخول الأعضاء الجدد.
+* **الرد التلقائي (Auto Reply):** استجابة البوت التلقائية لكلمات أو جمل محددة.
+* **الخط التلقائي (Auto Line):** إرسال فواصل تنظيمية تلقائياً في قنوات محددة.
+* **الاقتراحات والآراء (Feedback & Suggestions):** قنوات مخصصة لاستقبال تقييمات واقتراحات الأعضاء مع أزرار تفاعلية.
+
+### ⚙️ أنظمة إضافية
+* **الرتب التلقائية (Auto Role):** تعيين رتب تلقائية للأعضاء أو البوتات عند انضمامهم.
+* **نظام السحوبات (Giveaways):** إنشاء وإدارة السحوبات (بدء، إنهاء، إعادة السحب).
+* **نظام الضريبة (Tax):** حساب دقيق لضرائب ProBot والوسطاء.
+
+---
+
+## 📸 معاينة البوت (Preview)
+
+| القائمة التفاعلية | أوامر الإدارة |
+| :---: | :---: |
+| ![Menu](https://res.cloudinary.com/dke6pxph1/image/upload/v1776051056/discord_uploads/p7klcbe5w8ab0n7t7ong.png) | ![Commands](https://res.cloudinary.com/dke6pxph1/image/upload/v1776051680/discord_uploads/mxyfj2tuxubsatytmqjm.png) |
+
+---
+
+## 📋 المتطلبات الأساسية (Prerequisites)
+قبل البدء، تأكد من تثبيت البرامج التالية على جهازك أو الخادم (Server):
+* [Node.js](https://nodejs.org/) (الإصدار 16.9.0 أو أحدث).
+* حساب مطور في [Discord Developer Portal](https://discord.com/developers/applications).
+* حساب مجاني في [Cloudinary](https://cloudinary.com/) (لرفع واستضافة الصور).
+
+---
+
+## 📂 التثبيت والإعداد (Installation)
+
+**1. قم باستنساخ المشروع (Clone the repository):**
 ```bash
-git clone https://github.com/username/repo.git
-cd repo
+git clone [https://github.com/YOUR-USERNAME/HOP-Bot.git](https://github.com/YOUR-USERNAME/HOP-Bot.git)
+cd HOP-Bot
+```
 
-   ---
-🧠 شرح config.js (مهم جدًا)
+**2. تثبيت الحزم البرمجية:**
+نظراً لوجود ملف `package.json`، كل ما عليك فعله هو تشغيل هذا الأمر لتثبيت جميع المكتبات المطلوبة دفعة واحدة:
+```bash
+npm install
+```
+
+---
+
+## 🔧 التكوين والربط (Configuration)
+
+قم بفتح ملف `config.js` في محرر الأكواد الخاص بك، وقم بتعبئة بياناتك لتفعيل البوت:
+
+```javascript
 module.exports = {
-  token: "YOUR_BOT_TOKEN",
-  prefix: "!",
-  owner: "YOUR_ID",
-  cloudinary: {
-    cloud_name: "YOUR_CLOUD_NAME",
-    api_key: "YOUR_API_KEY",
-    api_secret: "YOUR_API_SECRET"
+  token: "ضع_توكن_البوت_هنا", // توكن البوت من موقع ديسكورد
+  prefix: "!", // البادئة التي ستستخدمها للأوامر
   
-📌 شرح كل جزء:
-token
-👉 توكن البوت من Discord Developer Portal
-❗ 
-prefix
-👉 البادئة للأوامر (مثال: !help)
-owner
-👉 ID مالك البوت (أنت)
-cloudinary
-👉 نظام رفع الصور:
-cloud_name → اسم الحساب
-api_key → مفتاح API
-api_secret → السر
+  // إعدادات رفع الصور (احصل عليها من حسابك في Cloudinary)
+  cloudinary: {
+      cloud_name: "اسم_الكلاود_الخاص_بك",
+      api_key: "مفتاح_الـ_API",
+      api_secret: "الرقم_السري_للـ_API"
+  }
+};
+```
+*(⚠️ تحذير: لا تقم بمشاركة ملف `config.js` أو التوكن الخاص بك مع أي شخص)*.
 
-------
+---
 
-☁️ إعداد Cloudinary
-ادخل: https://cloudinary.com/
-اعمل حساب
-من Dashboard هتلاقي:
-Cloud Name
-API Key
-API Secret
-حطهم في config.js
+## ▶️ التشغيل (Usage)
 
-----
+بعد إكمال جميع الإعدادات، قم بتشغيل البوت باستخدام الأمر التالي في موجه الأوامر:
 
-⚡ شرح evemts/ready.js 
-
-عند تشغيل البوت:
-
-🔹 1. تسجيل السيرفرات
-البوت يعرض كل السيرفرات اللي فيها
-🔹 2. إنشاء دعوات تلقائيًا
-بيعمل Invite لكل سيرفر عنده صلاحية
-ويرسلها في روم محدد (log channel)
-🔹 3. نظام اللوج
-يرسل:
-عدد السيرفرات
-روابط الدعوة
-ضروري في سطر رقم  7 تحط id روم خاصه بلوج
-الأخطاء
-
-🔹 4. تشغيل البوت
-يظهر في الكونسول:
-Bot is now online
-
-▶️للتشغيل السريع :
-
+```bash
 node index.js
+```
+أو إذا كنت قد أعددت سكريبت التشغيل في الحزم:
+```bash
+npm start
+```
+*سيظهر لك في الكونسول (Console) رسالة تؤكد تسجيل الأوامر وعمل البوت بنجاح.*
+
+---
+
+## 📦 الحزم المستخدمة (Dependencies)
+يعتمد هذا المشروع على المكتبات التالية لضمان أفضل أداء:
+* `discord.js`: للتفاعل مع واجهة برمجة تطبيقات ديسكورد.
+* `st.db`: قاعدة بيانات خفيفة وسريعة التجاوب.
+* `cloudinary`: لرفع وإدارة الصور والخطوط السحابية.
+* `ascii-table`: لتنظيم وعرض الأوامر في الكونسول بشكل جدولي أنيق.
+
+npm install discord.js st.db ascii-table cloudinary
+---
+**تم التطوير بواسطة مبرمج المشروع.**

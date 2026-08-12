@@ -5,6 +5,6 @@ module.exports = {
     .setName("invite")
     .setDescription("احصل على رابط دعوة البوت"),
   async execute(interaction) {
-    await interaction.reply("رابط دعوة البوت: https://discord.com/oauth2/authorize?client_id=1303646938557579295");
+    await interaction.reply("رابط دعوة البوت: https://bit.ly/invite-hop");
   },
 };

@@ -24,7 +24,7 @@ module.exports = {
                     name: interaction.guild.name,
                     iconURL: interaction.guild.iconURL({ forceStatic: false })
                 })
-                .setTitle('📋 لوحة التحكم والمساعدة')
+                .setTitle('<:clipboard:1534179065328701440> لوحة التحكم والمساعدة')
                 .setDescription(
                     `<:hop:1527591995399209010> *أممم... دعني أرى ما الذي يمكنني مساعدتك به اليوم!*\n\n` +
                     `> **يرجى اختيار القسم المراد معرفة أوامره من القائمة بالأسفل.**`
@@ -39,14 +39,20 @@ module.exports = {
                 })
                 .setColor('#2b2d31');
 
+            // دالة استخراج آيدي الايموجي من الصيغة النصية ليظهر بشكل صحيح في السلكت منيو
+            const extractEmojiId = (emojiStr) => {
+                const match = emojiStr?.match(/:(\d+)>/);
+                return match ? match[1] : emojiStr;
+            };
+
             const menu = new StringSelectMenuBuilder()
                 .setCustomId('help_menu')
-                .setPlaceholder('📂 اختر قسم لعرض أوامره')
+                .setPlaceholder('اختر قسم لعرض أوامره')
                 .addOptions(
                     categories.map(cat => ({
                         label: cat.label,
                         value: cat.id,
-                        emoji: cat.emoji,
+                        emoji: extractEmojiId(cat.emoji),
                         description: cat.selectDescription,
                     }))
                 );

@@ -4,6 +4,7 @@ const { Database } = require("st.db")
 const taxDB = new Database("/Json-db/Bots/taxDB.json")
 const { PermissionsBitField } = require('discord.js')
 const autolineDB = new Database("/Json-db/Bots/autolineDB.json")
+const autoroleDB = new Database("/Json-db/Bots/autoroleDB.json");
 const suggestionsDB = new Database("/Json-db/Bots/suggestionsDB.json")
 const feedbackDB = new Database("/Json-db/Bots/feedbackDB.json")
 const giveawayDB = new Database("/Json-db/Bots/giveawayDB.json")
@@ -16,35 +17,33 @@ const one4allDB = new Database("/Json-db/Bots/one4allDB.json")
 const ticketDB = new Database("/Json-db/Bots/ticketDB.json")
 const afkDB = new Database("/Json-db/Bots/afkDB.json");
 
-
 const path = require('path');
 const { readdirSync } = require("fs");
-  const { REST } = require('@discordjs/rest');
-  const { Routes } = require('discord-api-types/v10');
-const { token, clientId,owner, prefix } = require('./config.js');
+const { REST } = require('@discordjs/rest');
+const { Routes } = require('discord-api-types/v10');
+const { token, clientId, owner, prefix } = require('./config.js');
 const getHelpCategories = require('./helpCategories');
-  theowner = owner;
+theowner = owner;
+
 const client27 = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildVoiceStates] , shards: "auto", partials: [Partials.Message, Partials.Channel, Partials.GuildMember,]});
-  client27.commands = new Collection();
-  require(`./handlers/events`)(client27);
-  client27.events = new Collection();
-  const rest = new REST({ version: '10' }).setToken(token);
-  client27.setMaxListeners(1000)
+client27.commands = new Collection();
+require(`./handlers/events`)(client27);
+client27.events = new Collection();
+const rest = new REST({ version: '10' }).setToken(token);
+client27.setMaxListeners(1000)
 
-  client27.on("ready" , async() => {
-
-      try {
+client27.on("ready" , async() => {
+    try {
         await rest.put(
-          Routes.applicationCommands(client27.user.id),
-          { body: one4allSlashCommands },
-          );
-          
-        } catch (error) {
-          console.error(error)
-        }
+            Routes.applicationCommands(client27.user.id),
+            { body: one4allSlashCommands },
+        );
+    } catch (error) {
+        console.error(error)
+    }
+});
 
-    });
-        client27.once('ready', () => {
+client27.once('ready', () => {
     client27.guilds.cache.forEach(guild => {
         guild.members.fetch().then(members => {
             if (members.size < 10) {
@@ -53,86 +52,78 @@ const client27 = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBi
         }).catch(console.error);
     });
 });
-  //------------- التحقق من وقت البوت --------------//
 
-    require(`./handlers/events`)(client27)
-    require("./handlers/suggest")(client27)
-    require('./handlers/tax4bot')(client27)
-    require("./handlers/autorole")(client27)
-    require(`./handlers/events`)(client27);
-    require(`./handlers/claim`)(client27);
-    require(`./handlers/close`)(client27);
-    require(`./handlers/create`)(client27);
-    require(`./handlers/reset`)(client27);
-    require(`./handlers/support-panel`)(client27);
-    require('./handlers/joinGiveaway')(client27)
-    require(`./handlers/events`)(client27)
-    require(`./handlers/applyCreate`)(client27)
-    require(`./handlers/applyResult`)(client27)
-    require(`./handlers/applySubmit`)(client27)
-    require(`./handlers/events`)(client27)
-    require(`./handlers/addToken`)(client27)
-    require(`./handlers/info`)(client27)
+//------------- التحقق من وقت البوتHandlers --------------//
+require(`./handlers/events`)(client27)
+require("./handlers/suggest")(client27)
+require('./handlers/tax4bot')(client27)
+require("./handlers/autorole")(client27)
+require(`./handlers/events`)(client27);
+require(`./handlers/claim`)(client27);
+require(`./handlers/close`)(client27);
+require(`./handlers/create`)(client27);
+require(`./handlers/reset`)(client27);
+require(`./handlers/support-panel`)(client27);
+require('./handlers/joinGiveaway')(client27)
+require(`./handlers/events`)(client27)
+require(`./handlers/applyCreate`)(client27)
+require(`./handlers/applyResult`)(client27)
+require(`./handlers/applySubmit`)(client27)
+require(`./handlers/events`)(client27)
+require(`./handlers/addToken`)(client27)
+require(`./handlers/info`)(client27)
  
-  const folderPath = path.join(__dirname, 'slashcommand27');
-  client27.one4allSlashCommands = new Collection();
-  const one4allSlashCommands = [];
-  const ascii = require("ascii-table");
-  const table = new ascii("one4all commands").setJustify();
-  for (let folder of readdirSync(folderPath).filter(
-    (folder) => !folder.includes(".")
-    )) {
-      for (let file of readdirSync(`${folderPath}/` + folder).filter((f) =>
-      f.endsWith(".js")
-      )) {
+const folderPath = path.join(__dirname, 'slashcommand27');
+client27.one4allSlashCommands = new Collection();
+const one4allSlashCommands = [];
+const ascii = require("ascii-table");
+const table = new ascii("one4all commands").setJustify();
+
+for (let folder of readdirSync(folderPath).filter((folder) => !folder.includes("."))) {
+    for (let file of readdirSync(`${folderPath}/` + folder).filter((f) => f.endsWith(".js"))) {
         let command = require(`${folderPath}/${folder}/${file}`);
         if (command) {
-          one4allSlashCommands.push(command.data.toJSON());
-          client27.one4allSlashCommands.set(command.data.name, command);
-          if (command.data.name) {
-            table.addRow(`/${command.data.name}`, "🟢 Working");
-          } else {
-            table.addRow(`/${command.data.name}`, "🔴 Not Working");
-          }
+            one4allSlashCommands.push(command.data.toJSON());
+            client27.one4allSlashCommands.set(command.data.name, command);
+            if (command.data.name) {
+                table.addRow(`/${command.data.name}`, "🟢 Working");
+            } else {
+                table.addRow(`/${command.data.name}`, "🔴 Not Working");
+            }
         }
-  }
+    }
 }
 
-
-
 const folderPath2 = path.join(__dirname, 'slashcommand27');
-
 for(let foldeer of readdirSync(folderPath2).filter((folder) => !folder.includes("."))) {
-  for(let fiee of(readdirSync(`${folderPath2}/${foldeer}`).filter((fi) => fi.endsWith(".js")))) {
-    const commander = require(`${folderPath2}/${foldeer}/${fiee}`)
-  }
+    for(let fiee of(readdirSync(`${folderPath2}/${foldeer}`).filter((fi) => fi.endsWith(".js")))) {
+        const commander = require(`${folderPath2}/${foldeer}/${fiee}`)
+    }
 }
 
 require("./handlers/events")(client27)
 
-	for (let file of readdirSync('./events/').filter(f => f.endsWith('.js'))) {
-		const event = require(`./events/${file}`);
-	if (event.once) {
-		client27.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client27.on(event.name, (...args) => event.execute(...args));
-	}
-	}
+for (let file of readdirSync('./events/').filter(f => f.endsWith('.js'))) {
+    const event = require(`./events/${file}`);
+    if (event.once) {
+        client27.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client27.on(event.name, (...args) => event.execute(...args));
+    }
+}
 
-  
-  client27.on("messageCreate", async (message) => {
+//------------- نظام الـ AFK --------------//
+client27.on("messageCreate", async (message) => {
     if (message.author.bot) return;
 
     const userId = message.author.id;
     const guild = message.guild;
 
-    // 🔹 إلغاء AFK عند إرسال رسالة
     if (afkDB.has(userId)) {
         afkDB.delete(userId);
         message.reply(`✅ **مرحبًا بعودتك ${message.author}, تم إلغاء وضع AFK!**`);
     }
 
-    // 🔹 عند منشن شخص في وضع AFK، يظهر السبب داخل Embed بلون أسود وصورة السيرفر
     if (message.mentions.members.size > 0) {
         message.mentions.members.forEach(member => {
             if (afkDB.has(member.id)) {
@@ -148,7 +139,6 @@ require("./handlers/events")(client27)
         });
     }
 
-    // 🔹 عند كتابة !afk السبب، يتم تفعيل AFK
     if (message.content.toLowerCase().startsWith(".afk")) {
         const args = message.content.split(" ").slice(1);
         const reason = args.join(" ") || "غير محدد";
@@ -156,7 +146,7 @@ require("./handlers/events")(client27)
         afkDB.set(userId, { reason: reason, timestamp: Date.now() });
 
         const afkEmbed = new EmbedBuilder()
-            .setColor("#000000") // لون أسود
+            .setColor("#000000")
             .setTitle("☕ تم تفعيل وضع AFK")
             .setDescription(`**السبب:** ${reason}`)
             .setThumbnail(guild.iconURL({ dynamic: true }));
@@ -165,139 +155,118 @@ require("./handlers/events")(client27)
     }
 });
 
-
-  client27.on("messageCreate" , async(message) => {
+client27.on("messageCreate" , async(message) => {
     if(message.content == "test"){
-      message.reply(`works fine`)
+        message.reply(`works fine`)
     }
-  })
+})
 
-  client27.on("interactionCreate" , async(interaction) => {
+//------------- تشغيل أوامر السلاش --------------//
+client27.on("interactionCreate" , async(interaction) => {
     if (interaction.isChatInputCommand()) {
-      
-	    if(interaction.user.bot) return;
+        if(interaction.user.bot) return;
 
-      
-      const command = client27.one4allSlashCommands.get(interaction.commandName);
-	    
-      if (!command) {
-        return;
-      }
-      if (command.ownersOnly === true) {
-        if (owner != interaction.user.id) {
-          return interaction.reply({content: `❗ ***لا تستطيع استخدام هذا الامر***`, ephemeral: true});
+        const command = client27.one4allSlashCommands.get(interaction.commandName);
+        if (!command) return;
+
+        if (command.ownersOnly === true) {
+            if (owner != interaction.user.id) {
+                return interaction.reply({content: `❗ ***لا تستطيع استخدام هذا الامر***`, ephemeral: true});
+            }
         }
-      }
         if (command.adminsOnly === true) {
             if (!interaction.member.permissions.has(PermissionsBitField.Flags.Administrator)) {
                 return interaction.reply({ content: `❗ ***يجب أن تمتلك صلاحية الأدمن لاستخدام هذا الأمر***`, ephemeral: true });
             }
         }
-      try {
-
-        await command.execute(interaction);
-      } catch (error) {
-			return console.log("🔴 | error in one4all bot" , error)
-		}
+        try {
+            await command.execute(interaction);
+        } catch (error) {
+            return console.log("🔴 | error in one4all bot" , error)
+        }
     }
-  } )
+})
 
-  //-------------------------- جميع الاكواد هنا ----------------------//
-
-
-process.on('uncaughtException', (err) => {
-  console.log(err)
-});
-process.on('unhandledRejection', (reason, promise) => {
- console.log(reason)
-});
- process.on("uncaughtExceptionMonitor", (reason) => { 
-	console.log(reason)
-});
-
-
-  client27.on("ready" , async() => {
+//------------- نظام الـ Giveaway --------------//
+client27.on("ready" , async() => {
     let theguild = client27.guilds.cache.first();
     setInterval(() => {
         if(!theguild) return;
-      let giveaways = giveawayDB.get(`giveaways_${theguild.id}`)
-      if(!giveaways) return;
-      giveaways.forEach(async(giveaway) => {
-        let {messageid , channelid , entries , winners , prize , duration,dir1,dir2,ended} = giveaway;
-        if(duration > 0) {
-          duration = duration - 1
-          giveaway.duration = duration;
-          await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
-        }else if(duration == 0) {
-          duration = duration - 1
-          giveaway.duration = duration;
-          await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
-          const theroom = theguild.channels.cache.find(ch => ch.id == channelid)
-          await theroom.messages.fetch(messageid)
-          const themsg = await theroom.messages.cache.find(msg => msg.id == messageid)
-          if(entries.length > 0 && entries.length >= winners) {
-            const theWinners = [];
-            for(let i = 0; i < winners; i++) {
-              let winner = Math.floor(Math.random() * entries.length);
-              let winnerExcept = entries.splice(winner, 1)[0];
-              theWinners.push(winnerExcept);
+        let giveaways = giveawayDB.get(`giveaways_${theguild.id}`)
+        if(!giveaways) return;
+        giveaways.forEach(async(giveaway) => {
+            let {messageid , channelid , entries , winners , prize , duration,dir1,dir2,ended} = giveaway;
+            if(duration > 0) {
+                duration = duration - 1
+                giveaway.duration = duration;
+                await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
+            } else if(duration == 0) {
+                duration = duration - 1
+                giveaway.duration = duration;
+                await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
+                const theroom = theguild.channels.cache.find(ch => ch.id == channelid)
+                await theroom.messages.fetch(messageid)
+                const themsg = await theroom.messages.cache.find(msg => msg.id == messageid)
+                if(entries.length > 0 && entries.length >= winners) {
+                    const theWinners = [];
+                    for(let i = 0; i < winners; i++) {
+                        let winner = Math.floor(Math.random() * entries.length);
+                        let winnerExcept = entries.splice(winner, 1)[0];
+                        theWinners.push(winnerExcept);
+                    }
+                    const button = new ButtonBuilder()
+                        .setEmoji(`🎉`)
+                        .setStyle(ButtonStyle.Primary)
+                        .setCustomId(`join_giveaway`)
+                        .setDisabled(true)
+                    const row = new ActionRowBuilder().addComponents(button)
+                    themsg.edit({components:[row]})
+                    themsg.reply({content:`Congratulations ${theWinners}! You won the **${prize}**!`})
+                    giveaway.ended = true;
+                    await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
+                } else {
+                    const button = new ButtonBuilder()
+                        .setEmoji(`🎉`)
+                        .setStyle(ButtonStyle.Primary)
+                        .setCustomId(`join_giveaway`)
+                        .setDisabled(true)
+                    const row = new ActionRowBuilder().addComponents(button)
+                    themsg.edit({components:[row]})
+                    themsg.reply({content:`**لا يوجد عدد من المشتركين كافي**`})
+                    giveaway.ended = true;
+                    await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
+                }
             }
-            const button = new ButtonBuilder()
-  .setEmoji(`🎉`)
-  .setStyle(ButtonStyle.Primary)
-  .setCustomId(`join_giveaway`)
-  .setDisabled(true)
-  const row = new ActionRowBuilder().addComponents(button)
-            themsg.edit({components:[row]})
-            themsg.reply({content:`Congratulations ${theWinners}! You won the **${prize}**!`})
-            giveaway.ended = true;
-            await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
-          }else{
-            const button = new ButtonBuilder()
-  .setEmoji(`🎉`)
-  .setStyle(ButtonStyle.Primary)
-  .setCustomId(`join_giveaway`)
-  .setDisabled(true)
-  const row = new ActionRowBuilder().addComponents(button)
-            themsg.edit({components:[row]})
-            themsg.reply({content:`**لا يوجد عدد من المشتركين كافي**`})
-            giveaway.ended = true;
-            await giveawayDB.set(`giveaways_${theguild.id}` , giveaways)
-          }
-        }
-      })
+        })
     }, 1000);
-  
-  })
+})
 
+//------------- نظام الـ Tax --------------//
 client27.on('messageCreate', async (message) => {
-  if (message.author.bot) return;
-  let roomid = taxDB.get(`tax_room_${message.guild.id}`);
-  let taxLine = taxDB.get(`tax_line_${message.guild.id}`);
-  let taxMode = taxDB.get(`tax_mode_${message.guild.id}`) || 'embed'; 
-  let taxColor = taxDB.get(`tax_color_${message.guild.id}`) || '#0099FF'; 
+    if (message.author.bot) return;
+    let roomid = taxDB.get(`tax_room_${message.guild.id}`);
+    let taxLine = taxDB.get(`tax_line_${message.guild.id}`);
+    let taxMode = taxDB.get(`tax_mode_${message.guild.id}`) || 'embed'; 
+    let taxColor = taxDB.get(`tax_color_${message.guild.id}`) || '#0099FF'; 
 
-  if (roomid) {
-    if (message.channel.id === roomid) {
-      if (message.author.bot) return;
+    if (roomid) {
+        if (message.channel.id === roomid) {
+            let number = message.content;
 
-      let number = message.content;
+            if (number.endsWith("k")) number = number.replace(/k/gi, "") * 1000;
+            else if (number.endsWith("K")) number = number.replace(/K/gi, "") * 1000;
+            else if (number.endsWith("m")) number = number.replace(/m/gi, "") * 1000000;
+            else if (number.endsWith("M")) number = number.replace(/M/gi, "") * 1000000;
 
-      if (number.endsWith("k")) number = number.replace(/k/gi, "") * 1000;
-      else if (number.endsWith("K")) number = number.replace(/K/gi, "") * 1000;
-      else if (number.endsWith("m")) number = number.replace(/m/gi, "") * 1000000;
-      else if (number.endsWith("M")) number = number.replace(/M/gi, "") * 1000000;
+            if (isNaN(number) || number == 0) return message.delete();
 
-      if (isNaN(number) || number == 0) return message.delete();
+            let number2 = parseInt(number);
+            let tax = Math.floor(number2 * 20 / 19 + 1);
+            let tax3 = Math.floor(tax * 20 / 19 + 1);
+            let tax4 = Math.floor(number2 * 0.02);
+            let tax5 = Math.floor(tax3 + tax4);
 
-      let number2 = parseInt(number); // المبلغ
-      let tax = Math.floor(number2 * 20 / 19 + 1); // المبلغ مع الضريبة
-      let tax2 = Math.floor(tax - number2); // الضريبة
-      let tax3 = Math.floor(tax * 20 / 19 + 1); // المبلغ مع ضريبة الوسيط
-      let tax4 = Math.floor(number2 * 0.02); // نسبة الوسيط
-      let tax5 = Math.floor(tax3 + tax4); // الضريبة كاملة مع نسبة الوسيط
-
-      let description = `
+            let description = `
 🪙 المبلغ ** : ${number2}**
 - ضريبة برو بوت **: ${tax}**
 - المبلغ كامل مع ضريبة الوسيط **: ${tax3}**
@@ -305,39 +274,74 @@ client27.on('messageCreate', async (message) => {
 - الضريبة كاملة مع نسبة الوسيط **: ${tax5}**
 `;
 
-      let btn1 = new ActionRowBuilder().addComponents(
-        new ButtonBuilder()
-          .setCustomId(`tax_${tax}`)
-          .setLabel('Tax')
-          .setStyle(ButtonStyle.Primary),
-        new ButtonBuilder()
-          .setCustomId(`mediator_${tax5}`)
-          .setLabel('Mediator')
-          .setStyle(ButtonStyle.Secondary)
-      );
+            let btn1 = new ActionRowBuilder().addComponents(
+                new ButtonBuilder()
+                    .setCustomId(`tax_${tax}`)
+                    .setLabel('Tax')
+                    .setStyle(ButtonStyle.Primary),
+                new ButtonBuilder()
+                    .setCustomId(`mediator_${tax5}`)
+                    .setLabel('Mediator')
+                    .setStyle(ButtonStyle.Secondary)
+            );
 
-      if (taxMode === 'embed') {
-        let embed1 = new EmbedBuilder()
-          .setColor(taxColor)
-          .setDescription(description)
-          .setThumbnail(message.guild.iconURL({ dynamic: true }));
+            if (taxMode === 'embed') {
+                let embed1 = new EmbedBuilder()
+                    .setColor(taxColor)
+                    .setDescription(description)
+                    .setThumbnail(message.guild.iconURL({ dynamic: true }));
 
-        message.reply({ embeds: [embed1], components: [btn1] });
+                message.reply({ embeds: [embed1], components: [btn1] });
 
-        if (taxLine) {
-          message.channel.send({ files: [taxLine] });
+                if (taxLine) {
+                    message.channel.send({ files: [taxLine] });
+                }
+            } else {
+                message.reply({ content: description, components: [btn1] });
+
+                if (taxLine) {
+                    message.channel.send({ files: [taxLine] });
+                }
+            }
+            return;
         }
-      } else {
-        message.reply({ content: description, components: [btn1] });
-
-        if (taxLine) {
-          message.channel.send({ files: [taxLine] });
-        }
-      }
-
-      return;
     }
-  }
+});
+
+//------------- نظام الـ Auto-Role --------------//
+client27.on(Events.GuildMemberAdd, async (member) => {
+    try {
+        if (member.user.bot) {
+            const botRoleId = autoroleDB.get(`botRole_${member.guild.id}`);
+            if (botRoleId) {
+                const role = member.guild.roles.cache.get(botRoleId);
+                if (role) {
+                    await member.roles.add(role).catch(err => console.log(`فشل إعطاء رتبة البوت: ${err.message}`));
+                }
+            }
+        } else {
+            const memberRoleId = autoroleDB.get(`memberRole_${member.guild.id}`);
+            if (memberRoleId) {
+                const role = member.guild.roles.cache.get(memberRoleId);
+                if (role) {
+                    await member.roles.add(role).catch(err => console.log(`فشل إعطاء رتبة العضو: ${err.message}`));
+                }
+            }
+        }
+    } catch (error) {
+        console.error("حدث خطأ في نظام الـ Auto-Role:", error);
+    }
+});
+
+//------------- معالجة الأخطاء --------------//
+process.on('uncaughtException', (err) => {
+    console.log(err)
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.log(reason)
+});
+process.on("uncaughtExceptionMonitor", (reason) => { 
+    console.log(reason)
 });
 
   
@@ -1726,369 +1730,341 @@ users[index] = executordb;
 
 // نهاية الحماية من البان
 
-client27.on('messageDelete' , async(message) => {
-  if(!message) return;
-  if(!message.author) return;
-  if(message.author.bot) return;
-if (!logsDB.has(`log_messagedelete_${message.guild.id}`)) return;
-let deletelog1 = logsDB.get(`log_messagedelete_${message.guild.id}`)
-  let deletelog2 = message.guild.channels.cache.get(deletelog1)
-  const fetchedLogs = await message.guild.fetchAuditLogs({
-    limit: 1,
-    type: AuditLogEvent.MessageDelete
-  });
-  const deletionLog = fetchedLogs.entries.first();
-  const { executor, target } = deletionLog;
-let deleteembed = new EmbedBuilder()
-.setTitle(`**تم حذف رسالة**`)
-    .addFields(
-      {
-        name: `**صاحب الرسالة : **`, value: `**\`\`\`${message.author.tag} - (${message.author.id})\`\`\`**`, inline: false
-      },
-      {
-        name: `**حاذف الرسالة : **`, value: `**\`\`\`${executor.username} - (${executor.id})\`\`\`**`, inline: false
-      },
-      {
-        name: `**محتوى الرسالة : **`, value: `**\`\`\`${message.content}\`\`\`**`, inline: false
-      },
-      {
-        name: `**الروم الذي تم الحذف فيه : **`, value: `${message.channel}`, inline: false
-      }
-    )
-    .setTimestamp();
-  await deletelog2.send({ embeds: [deleteembed] })
-})
-client27.on('messageUpdate' , async(oldMessage, newMessage) => {
-if(!oldMessage.author) return;
-if(oldMessage.author.bot) return;
-if (!logsDB.has(`log_messageupdate_${oldMessage.guild.id}`)) return;
-const fetchedLogs = await oldMessage.guild.fetchAuditLogs({
-limit: 1,
-type: AuditLogEvent.MessageUpdate
+// --- SHOPPING WORLD ADVANCED LOGS ---
+// 1. حذف الرسائل
+client27.on('messageDelete', async (message) => {
+    try {
+        if (!message.guild || !message.author || message.author.bot) return;
+        if (!logsDB.has(`log_messagedelete_${message.guild.id}`)) return;
+        
+        const logChannelId = logsDB.get(`log_messagedelete_${message.guild.id}`);
+        const logChannel = message.guild.channels.cache.get(logChannelId);
+        if (!logChannel) return;
+
+        const auditLogs = await message.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MessageDelete }).catch(() => null);
+        const deletionEntry = auditLogs?.entries.first();
+        
+        // التأكد من أن السجل حديث لتجنب جلب بيانات قديمة
+        const executor = (deletionEntry && (Date.now() - deletionEntry.createdTimestamp < 5000)) ? deletionEntry.executor : null;
+
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: message.guild.iconURL() })
+            .setTitle('**تم حذف رسالة**')
+            .addFields(
+                { name: 'صاحب الرسالة:', value: `\`\`\`${message.author.tag}\`\`\``, inline: true },
+                { name: 'حاذف الرسالة:', value: `\`\`\`${executor ? executor.tag : 'صاحب الرسالة نفسه (أو غير معروف)'}\`\`\``, inline: true },
+                { name: 'القناة:', value: `<#${message.channel.id}>`, inline: false },
+                { name: 'المحتوى:', value: `\`\`\`${message.content || 'None'}\`\`\``, inline: false }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in messageDelete log:', err);
+    }
 });
-let updateLog1 = logsDB.get(`log_messageupdate_${oldMessage.guild.id}`);
-  let updateLog2 = oldMessage.guild.channels.cache.get(updateLog1); 
-const updateLog = fetchedLogs.entries.first();
-const { executor } = updateLog;
-let updateEmbed = new EmbedBuilder()
-.setTitle(`**تم تعديل رسالة**`)
-.addFields(
-{
-  name: "**صاحب الرسالة:**",
-  value: `**\`\`\`${oldMessage.author.tag} (${oldMessage.author.id})\`\`\`**`,
-  inline: false
-},
-{
-  name: "**المحتوى القديم:**",
-  value: `**\`\`\`${oldMessage.content}\`\`\`**`,
-  inline: false
-},
-{
-  name: "**المحتوى الجديد:**",
-  value: `**\`\`\`${newMessage.content}\`\`\`**`,
-  inline: false
-},
-{
-  name: "**الروم الذي تم التحديث فيه:**",
-  value: `${oldMessage.channel}`,
-  inline: false
-}
-)
-.setTimestamp()
-await updateLog2.send({ embeds: [updateEmbed] });
-})
-client27.on('roleCreate' , async(role) => {
-if (!logsDB.has(`log_rolecreate_${role.guild.id}`)) return;
-let roleCreateLog1 = logsDB.get(`log_rolecreate_${role.guild.id}`);
-  let roleCreateLog2 = role.guild.channels.cache.get(roleCreateLog1);
-  const fetchedLogs = await role.guild.fetchAuditLogs({
-    limit: 1,
-    type: AuditLogEvent.RoleCreate
-  });
-  const roleCreateLog = fetchedLogs.entries.first();
-  const { executor } = roleCreateLog;
-  let roleCreateEmbed = new EmbedBuilder()
-    .setTitle('**تم انشاء رتبة**')
-    .addFields(
-      { name: 'اسم الرتبة :', value: `\`\`\`${role.name}\`\`\``, inline: true },
-      { name: 'الذي قام بانشاء الرتبة :', value: `\`\`\`${executor.username} (${executor.id})\`\`\``, inline: true }
-    )
-    .setTimestamp();
-  await roleCreateLog2.send({ embeds: [roleCreateEmbed] });
-})
-client27.on('roleDelete' , async(role) => {
-if (!logsDB.has(`log_roledelete_${role.guild.id}`)) return;
-let roleDeleteLog1 = logsDB.get(`log_roledelete_${role.guild.id}`);
-  let roleDeleteLog2 = role.guild.channels.cache.get(roleDeleteLog1);
-  const fetchedLogs = await role.guild.fetchAuditLogs({
-    limit: 1,
-    type: AuditLogEvent.RoleDelete
-  });
 
-  const roleDeleteLog = fetchedLogs.entries.first();
-  const { executor } = roleDeleteLog;
+// 2. تعديل الرسائل
+client27.on('messageUpdate', async (oldMessage, newMessage) => {
+    try {
+        if (!oldMessage.guild || !oldMessage.author || oldMessage.author.bot) return;
+        if (oldMessage.content === newMessage.content) return;
+        if (!logsDB.has(`log_messageupdate_${oldMessage.guild.id}`)) return;
 
-  let roleDeleteEmbed = new EmbedBuilder()
-    .setTitle('**تم حذف رتبة**')
-    .addFields({name:'اسم الرتبة :', value:`\`\`\`${role.name}\`\`\``, inline:true},{name:'الذي قام بحذف الرتبة :', value:`\`\`\`${executor.username} (${executor.id})\`\`\``, inline:true})
-    .setTimestamp();
+        const logChannelId = logsDB.get(`log_messageupdate_${oldMessage.guild.id}`);
+        const logChannel = oldMessage.guild.channels.cache.get(logChannelId);
+        if (!logChannel) return;
 
-  await roleDeleteLog2.send({ embeds: [roleDeleteEmbed] });
-})
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: oldMessage.guild.iconURL() })
+            .setTitle('**تم تعديل رسالة**')
+            .addFields(
+                { name: 'صاحب الرسالة:', value: `\`\`\`${oldMessage.author.tag}\`\`\``, inline: false },
+                { name: 'القديم:', value: `\`\`\`${oldMessage.content || 'None'}\`\`\``, inline: false },
+                { name: 'الجديد:', value: `\`\`\`${newMessage.content || 'None'}\`\`\``, inline: false }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
 
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in messageUpdate log:', err);
+    }
+});
 
+// 3. الرتب (إنشاء)
+client27.on('roleCreate', async (role) => {
+    try {
+        if (!logsDB.has(`log_rolecreate_${role.guild.id}`)) return;
+        const logChannel = role.guild.channels.cache.get(logsDB.get(`log_rolecreate_${role.guild.id}`));
+        if (!logChannel) return;
 
+        const auditLogs = await role.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.RoleCreate }).catch(() => null);
+        const entry = auditLogs?.entries.first();
+        const executor = entry?.executor;
 
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: role.guild.iconURL() })
+            .setTitle('**تم انشاء رتبة**')
+            .addFields(
+                { name: 'اسم الرتبة:', value: `\`\`\`${role.name}\`\`\``, inline: true },
+                { name: 'بواسطة:', value: `\`\`\`${executor ? executor.tag : 'Unknown'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in roleCreate log:', err);
+    }
+});
+
+// 3. الرتب (حذف)
+client27.on('roleDelete', async (role) => {
+    try {
+        if (!logsDB.has(`log_roledelete_${role.guild.id}`)) return;
+        const logChannel = role.guild.channels.cache.get(logsDB.get(`log_roledelete_${role.guild.id}`));
+        if (!logChannel) return;
+
+        const auditLogs = await role.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.RoleDelete }).catch(() => null);
+        const entry = auditLogs?.entries.first();
+        const executor = entry?.executor;
+
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: role.guild.iconURL() })
+            .setTitle('**تم حذف رتبة**')
+            .addFields(
+                { name: 'اسم الرتبة:', value: `\`\`\`${role.name}\`\`\``, inline: true },
+                { name: 'بواسطة:', value: `\`\`\`${executor ? executor.tag : 'Unknown'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in roleDelete log:', err);
+    }
+});
+
+// 4. القنوات (إنشاء)
 client27.on('channelCreate', async (channel) => {
-if (logsDB.has(`log_channelcreate_${channel.guild.id}`)) {
-let channelCreateLog1 = logsDB.get(`log_channelcreate_${channel.guild.id}`);
-let channelCreateLog2 = channel.guild.channels.cache.get(channelCreateLog1);
+    try {
+        if (!channel.guild || !logsDB.has(`log_channelcreate_${channel.guild.id}`)) return;
+        const logChannel = channel.guild.channels.cache.get(logsDB.get(`log_channelcreate_${channel.guild.id}`));
+        if (!logChannel) return;
 
+        const auditLogs = await channel.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.ChannelCreate }).catch(() => null);
+        const entry = auditLogs?.entries.first();
+        const executor = entry?.executor;
 
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: channel.guild.iconURL() })
+            .setTitle('**تم إنشاء قناة**')
+            .addFields(
+                { name: 'اسم القناة:', value: `\`\`\`${channel.name}\`\`\``, inline: true },
+                { name: 'بواسطة:', value: `\`\`\`${executor ? executor.tag : 'Unknown'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
 
-
-const fetchedLogs = await channel.guild.fetchAuditLogs({
-  limit: 1,
-  type: AuditLogEvent.ChannelCreate
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in channelCreate log:', err);
+    }
 });
 
-const channelCreateLog = fetchedLogs.entries.first();
-const { executor } = channelCreateLog;
-
-let channelCategory = channel.parent ? channel.parent.name : 'None';
-
-let channelCreateEmbed = new EmbedBuilder()
-  .setTitle('**تم انشاء روم**')
-  .addFields(
-    { name: 'اسم الروم : ', value: `\`\`\`${channel.name}\`\`\``, inline: true },
-    { name: 'كاتيجوري الروم : ', value: `\`\`\`${channelCategory}\`\`\``, inline: true },
-    { name: 'الذي قام بانشاء الروم : ', value: `\`\`\`${executor.username} (${executor.id})\`\`\``, inline: true }
-  )
-  .setTimestamp();
-
-await channelCreateLog2.send({ embeds: [channelCreateEmbed] });
-}
-});
-
-
-
-
+// 4. القنوات (حذف)
 client27.on('channelDelete', async (channel) => {
-if (logsDB.has(`log_channeldelete_${channel.guild.id}`)) {
-let channelDeleteLog1 = logsDB.get(`log_channeldelete_${channel.guild.id}`);
-let channelDeleteLog2 = channel.guild.channels.cache.get(channelDeleteLog1);
+    try {
+        if (!channel.guild || !logsDB.has(`log_channeldelete_${channel.guild.id}`)) return;
+        const logChannel = channel.guild.channels.cache.get(logsDB.get(`log_channeldelete_${channel.guild.id}`));
+        if (!logChannel) return;
 
+        const auditLogs = await channel.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.ChannelDelete }).catch(() => null);
+        const entry = auditLogs?.entries.first();
+        const executor = entry?.executor;
 
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: channel.guild.iconURL() })
+            .setTitle('**تم حذف قناة**')
+            .addFields(
+                { name: 'اسم القناة:', value: `\`\`\`${channel.name}\`\`\``, inline: true },
+                { name: 'بواسطة:', value: `\`\`\`${executor ? executor.tag : 'Unknown'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
 
-
-const fetchedLogs = await channel.guild.fetchAuditLogs({
-  limit: 1,
-  type: AuditLogEvent.ChannelDelete
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in channelDelete log:', err);
+    }
 });
 
-const channelDeleteLog = fetchedLogs.entries.first();
-const { executor } = channelDeleteLog;
+// 5. الحظر (Ban Add)
+client27.on('guildBanAdd', async (ban) => {
+    try {
+        const { guild, user } = ban;
+        if (!logsDB.has(`log_banadd_${guild.id}`)) return;
+        const logChannel = guild.channels.cache.get(logsDB.get(`log_banadd_${guild.id}`));
+        if (!logChannel) return;
 
-let channelDeleteEmbed = new EmbedBuilder()
-  .setTitle('**تم حذف روم**')
-  .addFields(
-    { name: 'اسم الروم : ', value: `\`\`\`${channel.name}\`\`\``, inline: true },
-    { name: 'الذي قام بحذف الروم : ', value: `\`\`\`${executor.username} (${executor.id})\`\`\``, inline: true }
-  )
-  .setTimestamp();
+        const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanAdd }).catch(() => null);
+        const entry = auditLogs?.entries.first();
+        const executor = entry?.executor;
 
-await channelDeleteLog2.send({ embeds: [channelDeleteEmbed] });
-}
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: guild.iconURL() })
+            .setTitle('**تم حظر عضو**')
+            .addFields(
+                { name: 'العضو المحظور:', value: `\`\`\`${user.tag}\`\`\``, inline: true },
+                { name: 'بواسطة المشرف:', value: `\`\`\`${executor ? executor.tag : 'Unknown'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in guildBanAdd log:', err);
+    }
 });
 
-client27.on('guildMemberUpdate', async (oldMember, newMember) => {
-const guild = oldMember.guild;
-const addedRoles = newMember.roles.cache.filter((role) => !oldMember.roles.cache.has(role.id));
-const removedRoles = oldMember.roles.cache.filter((role) => !newMember.roles.cache.has(role.id));
-
-
-
-
-if (addedRoles.size > 0 && logsDB.has(`log_rolegive_${guild.id}`)) {
-let roleGiveLog1 = logsDB.get(`log_rolegive_${guild.id}`);
-let roleGiveLog2 = guild.channels.cache.get(roleGiveLog1);
-
-const fetchedLogs = await guild.fetchAuditLogs({
-  limit: addedRoles.size,
-  type: AuditLogEvent.MemberRoleUpdate
-});
-
-addedRoles.forEach((role) => {
-  const roleGiveLog = fetchedLogs.entries.find((log) => log.target.id === newMember.id && log.changes[0].new[0].id === role.id);
-  const roleGiver = roleGiveLog ? roleGiveLog.executor : null;
-  const roleGiverUsername = roleGiver ? `${roleGiver.username} (${roleGiver.id})` : `UNKNOWN`;
-
-
-
-  let roleGiveEmbed = new EmbedBuilder()
-    .setTitle('**تم إعطاء رتبة لعضو**')
-    .addFields(
-      { name: 'اسم الرتبة:', value: `\`\`\`${role.name}\`\`\``, inline: true },
-      { name: 'تم إعطاءها بواسطة:', value: `\`\`\`${roleGiverUsername}\`\`\``, inline: true },
-      { name: 'تم إعطائها للعضو:', value: `\`\`\`${newMember.user.username} (${newMember.user.id})\`\`\``, inline: true }
-    )
-    .setTimestamp();
-
-  roleGiveLog2.send({ embeds: [roleGiveEmbed] });
-});
-}
-
-if (removedRoles.size > 0 && logsDB.has(`log_roleremove_${guild.id}`)) {
-let roleRemoveLog1 = logsDB.get(`log_roleremove_${guild.id}`);
-let roleRemoveLog2 = guild.channels.cache.get(roleRemoveLog1);
-
-const fetchedLogs = await guild.fetchAuditLogs({
-  limit: removedRoles.size,
-  type: AuditLogEvent.MemberRoleUpdate
-});
-
-
-
-
-removedRoles.forEach((role) => {
-  const roleRemoveLog = fetchedLogs.entries.find((log) => log.target.id === newMember.id && log.changes[0].new[0].id === role.id);
-  const roleRemover = roleRemoveLog ? roleRemoveLog.executor : null;
-  const roleRemoverUsername = roleRemover ? `${roleRemover.username} (${roleRemover.id})` : `UNKNOWN`;
-
-  let roleRemoveEmbed = new EmbedBuilder()
-    .setTitle('**تم إزالة رتبة من عضو**')
-    .addFields(
-      { name: 'اسم الرتبة:', value: `\`\`\`${role.name}\`\`\``, inline: true },
-      { name: 'تم إزالتها بواسطة:', value: `\`\`\`${roleRemoverUsername}\`\`\``, inline: true },
-      { name: 'تم إزالتها من العضو:', value: `\`\`\`${newMember.user.username} (${newMember.user.id})\`\`\``, inline: true }
-    )
-    .setTimestamp();
-
-
-  roleRemoveLog2.send({ embeds: [roleRemoveEmbed] });
-});
-}
-});
-client27.on('guildMemberAdd', async (member) => {
-const guild = member.guild;
-if(!member.bot) return;
-const fetchedLogs = await guild.fetchAuditLogs({
-limit: 1,
-type: AuditLogEvent.BotAdd
-});
-
-
-
-
-const botAddLog = fetchedLogs.entries.first();
-const { executor, target } = botAddLog;
-
-if (target.bot) {
-let botAddLog1 = logsDB.get(`log_botadd_${guild.id}`);
-let botAddLog2 = guild.channels.cache.get(botAddLog1);
-
-let botAddEmbed = new EmbedBuilder()
-  .setTitle('**تم اضافة بوت جديد الى السيرفر**')
-  .addFields(
-    { name: 'اسم البوت :', value: `\`\`\`${member.user.username}\`\`\``, inline: true },
-    { name: 'ايدي البوت :', value: `\`\`\`${member.user.id}\`\`\``, inline: true },
-    { name: 'هل لدية صلاحية الادمن ستريتور ؟ :', value: member.permissions.has('Administrator') ? `\`\`\`نعم لديه\`\`\`` : `\`\`\`لا ليس لديه\`\`\``, inline: true },
-    { name: 'تم اضافته بواسطة :', value: `\`\`\`${executor.username} (${executor.id})\`\`\``, inline: false }
-  )
-  .setTimestamp();
-
-botAddLog2.send({ embeds: [botAddEmbed] });
-}
-});
-
-
-
-
-
-client27.on('guildBanAdd', async (guild, user) => {
-if (logsDB.has(`log_banadd_${guild.id}`)) {
-let banAddLog1 = logsDB.get(`log_banadd_${guild.id}`);
-let banAddLog2 = guild.channels.cache.get(banAddLog1);
-
-const fetchedLogs = await guild.fetchAuditLogs({
-  limit: 1,
-  type: AuditLogEvent.MemberBanAdd
-});
-
-const banAddLog = fetchedLogs.entries.first();
-const banner = banAddLog ? banAddLog.executor : null;
-const bannerUsername = banner ? `\`\`\`${banner.username} (${banner.id})\`\`\`` : `\`\`\`UNKNOWN\`\`\``;
-
-
-let banAddEmbed = new EmbedBuilder()
-  .setTitle('**تم حظر عضو**')
-  .addFields(
-    { name: 'العضو المحظور:', value: `\`\`\`${user.tag} (${user.id})\`\`\`` },
-    { name: 'تم حظره بواسطة:', value: bannerUsername },
-  )
-  .setTimestamp();
-
-banAddLog2.send({ embeds: [banAddEmbed] });
-}
-});
-
-
-
-
-client27.on('guildBanRemove', async (guild, user) => {
-if (logsDB.has(`log_bandelete_${guild.id}`)) {
-let banRemoveLog1 = logsDB.get(`log_bandelete_${guild.id}`);
-let banRemoveLog2 = guild.channels.cache.get(banRemoveLog1);
-
-const fetchedLogs = await guild.fetchAuditLogs({
-  limit: 1,
-  type: AuditLogEvent.MemberBanRemove
-});
-
-const banRemoveLog = fetchedLogs.entries.first();
-const unbanner = banRemoveLog ? banRemoveLog.executor : null;
-const unbannerUsername = unbanner ? `\`\`\`${unbanner.username} (${unbanner.id})\`\`\`` : `\`\`\`UNKNOWN\`\`\``;
-
-let banRemoveEmbed = new EmbedBuilder()
-  .setTitle('**تم إزالة حظر عضو**')
-  .addFields(
-    { name: 'العضو المفكّر الحظر عنه:', value: `\`\`\`${user.tag} (${user.id})\`\`\`` },
-    { name: 'تم إزالة الحظر بواسطة:', value: unbannerUsername }
-  )
-  .setTimestamp();
-
-
-banRemoveLog2.send({ embeds: [banRemoveEmbed] });
-}
-});
-
-
+// 6. الطرد الحقيقي (Kick - باستخدام Audit Logs لمنع الوهم)
 client27.on('guildMemberRemove', async (member) => {
-const guild = member.guild;
-if (logsDB.has(`log_kickadd_${guild.id}`)) {
-const kickLogChannelId = logsDB.get(`log_kickadd_${guild.id}`);
-const kickLogChannel = guild.channels.cache.get(kickLogChannelId);
+    try {
+        if (!logsDB.has(`log_kickadd_${member.guild.id}`)) return;
+        
+        // التحقق مما إذا كان الحدث عبارة عن "طرد" حقيقي عبر سجل التدقيق وليس مجرد مغادرة عادية
+        const auditLogs = await member.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberKick }).catch(() => null);
+        const entry = auditLogs?.entries.first();
 
-const fetchedLogs = await guild.fetchAuditLogs({
-  limit: 1,
-  type: AuditLogEvent.MemberKick,
+        // التأكد من أن السجل يعود لهذا العضو المحدود وتم تنفيذه خلال آخر 5 ثوانٍ
+        if (!entry || entry.target.id !== member.id || (Date.now() - entry.createdTimestamp > 5000)) return;
+
+        const logChannel = member.guild.channels.cache.get(logsDB.get(`log_kickadd_${member.guild.id}`));
+        if (!logChannel) return;
+
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: member.guild.iconURL() })
+            .setTitle('**تم طرد عضو**')
+            .addFields(
+                { name: 'العضو المطرود:', value: `\`\`\`${member.user.tag}\`\`\``, inline: true },
+                { name: 'بواسطة المشرف:', value: `\`\`\`${entry.executor ? entry.executor.tag : 'Unknown'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in kick log:', err);
+    }
 });
 
-const kickLog = fetchedLogs.entries.first();
-const kicker = kickLog ? kickLog.executor : null;
-const kickerUsername = kicker ? `\`\`\`${kicker.username} (${kicker.id})\`\`\`` : 'Unknown';
+// 7. فك الحظر (Unban)
+client27.on('guildBanRemove', async (ban) => {
+    try {
+        const { guild, user } = ban;
+        if (!logsDB.has(`log_unban_${guild.id}`)) return;
+        const logChannel = guild.channels.cache.get(logsDB.get(`log_unban_${guild.id}`));
+        if (!logChannel) return;
 
-const kickEmbed = new EmbedBuilder()
-  .setTitle('**تم طرد عضو**')
-  .addFields(
-    { name: 'العضو المطرود:', value: `\`\`\`${member.user.tag} (${member.user.id})\`\`\`` },
-    { name: 'تم طرده بواسطة:', value: kickerUsername },
-  )
-  .setTimestamp();
+        const auditLogs = await guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberBanRemove }).catch(() => null);
+        const entry = auditLogs?.entries.first();
+        const executor = entry?.executor;
 
-kickLogChannel.send({ embeds: [kickEmbed] });
-}
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: guild.iconURL() })
+            .setTitle('**تم فك الحظر عن عضو**')
+            .addFields(
+                { name: 'العضو:', value: `\`\`\`${user.tag}\`\`\``, inline: true },
+                { name: 'بواسطة:', value: `\`\`\`${executor ? executor.tag : 'Unknown'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in guildBanRemove log:', err);
+    }
 });
+
+// 8. تغيير اللقب (Nickname)
+client27.on('guildMemberUpdate', async (oldMember, newMember) => {
+    try {
+        if (oldMember.nickname === newMember.nickname) return;
+        if (!logsDB.has(`log_nickname_${oldMember.guild.id}`)) return;
+
+        const logChannel = oldMember.guild.channels.cache.get(logsDB.get(`log_nickname_${oldMember.guild.id}`));
+        if (!logChannel) return;
+
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: oldMember.guild.iconURL() })
+            .setTitle('**تم تغيير نك نيم**')
+            .addFields(
+                { name: 'العضو:', value: `${oldMember.user.tag}`, inline: false },
+                { name: 'القديم:', value: `\`\`\`${oldMember.nickname || 'None'}\`\`\``, inline: true },
+                { name: 'الجديد:', value: `\`\`\`${newMember.nickname || 'None'}\`\`\``, inline: true }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in nickname log:', err);
+    }
+});
+
+// 9. تحديث القنوات (اسم القناة)
+client27.on('channelUpdate', async (oldChannel, newChannel) => {
+    try {
+        if (!oldChannel.guild || oldChannel.name === newChannel.name) return;
+        if (!logsDB.has(`log_channelupdate_${oldChannel.guild.id}`)) return;
+
+        const logChannel = oldChannel.guild.channels.cache.get(logsDB.get(`log_channelupdate_${oldChannel.guild.id}`));
+        if (!logChannel) return;
+
+        const auditLogs = await oldChannel.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.ChannelUpdate }).catch(() => null);
+        const entry = auditLogs?.entries.first();
+        const executor = entry?.executor;
+
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: oldChannel.guild.iconURL() })
+            .setTitle('**تم تحديث قناة**')
+            .addFields(
+                { name: 'الاسم القديم:', value: `\`\`\`${oldChannel.name}\`\`\``, inline: true },
+                { name: 'الاسم الجديد:', value: `\`\`\`${newChannel.name}\`\`\``, inline: true },
+                { name: 'بواسطة:', value: `\`\`\`${executor ? executor.tag : 'Unknown'}\`\`\``, inline: false }
+            )
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in channelUpdate log:', err);
+    }
+});
+
+// 10. دخول عضو جديد
+client27.on('guildMemberAdd', async (member) => {
+    try {
+        if (!logsDB.has(`log_memberadd_${member.guild.id}`)) return;
+        const logChannel = member.guild.channels.cache.get(logsDB.get(`log_memberadd_${member.guild.id}`));
+        if (!logChannel) return;
+
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'SHOPPING WORLD', iconURL: member.guild.iconURL() })
+            .setTitle('**عضو جديد انضم**')
+            .addFields({ name: 'العضو:', value: `\`\`\`${member.user.tag}\`\`\``, inline: false })
+            .setColor('#2b2d31')
+            .setTimestamp();
+
+        await logChannel.send({ embeds: [embed] });
+    } catch (err) {
+        console.error('Error in guildMemberAdd log:', err);
+    }
+});
+
+// --- END OF LOGS ---
 
 let invites = {}; 
 const getInviteCounts = async (guild) => {
@@ -2214,7 +2190,7 @@ client27.on("interactionCreate", async (interaction) => {
 
     const menu = new StringSelectMenuBuilder()
         .setCustomId('help_menu')
-        .setPlaceholder('📂 اختر قسم لعرض أوامره')
+        .setPlaceholder('<:folder:1534178691448438877> اختر قسم لعرض أوامره')
         .addOptions(
             categories.map(cat => new StringSelectMenuOptionBuilder()
                 .setLabel(cat.label)
