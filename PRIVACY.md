@@ -1,30 +1,135 @@
-# Privacy Policy for SHOP WORLD Bot
+# Privacy Policy for HOP Bot
 
-**Last Updated:** May 28, 2026
+**Last Updated: August 13, 2026**
 
-This Privacy Policy describes how the **SHOP WORLD** Discord bot collects, uses, and handles data. By adding the bot to your Discord server, you agree to the terms outlined in this policy.
+This Privacy Policy explains how **HOP Bot** ("HOP", "the Bot", "we", "our", or "us") processes and stores information when you add or use the Bot in a Discord server.
 
-### 1. Data Collection
-We prioritize user privacy and only collect data that is strictly necessary for the bot to function correctly. 
-* **Discord Data:** We may access information such as User IDs, Channel IDs, and Guild (Server) IDs.
-* **Message Content:** The bot only processes messages for the purpose of triggering specific features like "Auto Reply" or "Suggestion" commands. This data is not stored permanently unless explicitly requested by the server administrator (e.g., in a logs channel).
-* **Presence Data:** If enabled, the bot may process presence data (status/activity) to display server statistics or user profiles within the platform.
+By adding HOP Bot to a Discord server or using its features, you acknowledge the practices described in this Privacy Policy.
 
-### 2. Data Usage
-We use the collected information solely to:
-* Provide and maintain the functionality of the bot (e.g., ticketing, moderation, auto-replies).
-* Ensure the security and integrity of the server where the bot is installed.
-* Improve the user experience based on the features you interact with.
+## 1. Information We Process
 
-### 3. Data Storage
-* **Off-Platform Storage:** We do not store sensitive private message content on external servers or databases.
-* **Security:** All data handled by the bot remains within the Discord environment. We do not sell, trade, or rent user data to third parties.
-* **AI/Machine Learning:** We do not use any user data to train machine learning models or AI.
+HOP Bot may process information provided by Discord or generated through interactions with the Bot, depending on the features enabled in a server.
 
-### 4. User Rights (Opt-Out)
-Users and server administrators have control over their data:
-* **Opt-Out:** You can stop the bot from tracking or interacting with your data by removing the bot from your server or disabling specific modules via the bot’s command settings.
-* **Data Deletion:** Since we do not store private user content off-platform, there is no personal data stored to request for deletion.
+This may include:
 
-### 5. Contact
-If you have any questions or concerns regarding this privacy policy, please open an issue in our GitHub Repository: https://github.com/joox10/bot-Shop-world
+- **User IDs** — used to identify users and associate actions, permissions, applications, tickets, or configurations with the appropriate Discord account.
+- **Guild IDs** — used to identify servers and store server-specific Bot settings.
+- **Channel IDs** — used to configure and operate features such as tickets, applications, logs, suggestions, and other server systems.
+- **Role IDs** — used for permissions, applications, automatic roles, and other role-based features.
+- **Message Content** — may be processed when required by features such as Auto Reply, suggestions, moderation, logging, or other message-based systems.
+- **Interaction Data** — slash commands, buttons, select menus, and modal submissions may be processed to provide the requested functionality.
+- **Attachments and URLs** — may be processed when a Bot feature requires an attachment or media reference.
+- **Presence or Activity Information** — may be processed only when required by an enabled feature.
+
+The information processed by HOP Bot depends on the modules and features enabled by the server administrator.
+
+## 2. How We Use Information
+
+Information processed by HOP Bot is used to:
+
+- Provide and operate the Bot's features.
+- Store and apply server-specific configurations.
+- Process commands and user interactions.
+- Operate systems such as tickets, applications, suggestions, auto-replies, logging, moderation, and role management.
+- Associate actions with Discord users when required by a feature.
+- Maintain the security, stability, and reliability of the Bot.
+- Prevent abuse or unauthorized use of Bot features.
+
+HOP Bot does not use collected information for unrelated purposes.
+
+## 3. Data Storage
+
+HOP Bot may store certain configuration and operational data outside of Discord in order to provide its features.
+
+Depending on the enabled modules, stored information may include:
+
+- Discord User IDs
+- Guild/Server IDs
+- Channel IDs
+- Role IDs
+- Bot configuration and settings
+- Auto-reply configurations
+- Application configurations
+- Ticket-related configuration
+- Other data required for enabled Bot systems
+
+The exact information stored depends on how HOP Bot is configured by the server administrator.
+
+## 4. Message Content
+
+HOP Bot may process message content when a feature specifically requires it.
+
+For example, the Auto Reply system may inspect a message to determine whether it matches a configured automatic-reply trigger.
+
+Message content is not intended to be collected or stored indiscriminately.
+
+If a server administrator enables a logging feature that records relevant events or messages, the information generated by that feature may be stored or sent to the configured logging channel.
+
+## 5. Data Sharing
+
+HOP Bot does not sell, rent, or trade user data.
+
+We do not intentionally share collected information with third parties for advertising or commercial profiling.
+
+Information may only be disclosed when reasonably necessary to:
+
+- Operate and maintain HOP Bot and its infrastructure.
+- Protect the security of the Bot or its users.
+- Comply with applicable legal requirements.
+
+## 6. AI and Machine Learning
+
+HOP Bot does not use information collected through the Bot to train or develop artificial intelligence or machine-learning models.
+
+## 7. Data Retention
+
+Data may be retained for as long as it is necessary for the operation of the relevant Bot feature or server configuration.
+
+Server administrators may remove HOP Bot from their server at any time.
+
+Removing the Bot does not necessarily result in the immediate deletion of all previously stored information.
+
+## 8. Data Deletion
+
+Server administrators may request deletion of server-specific data associated with HOP Bot.
+
+To submit a request, please open an issue in our GitHub repository and provide:
+
+- The Discord server ID.
+- The type of data you want removed.
+- Any additional information necessary to identify the relevant data.
+
+Some information may be retained where necessary for security, legal, technical, or backup purposes.
+
+## 9. User Choices
+
+You can stop HOP Bot from processing information in your server by:
+
+- Removing HOP Bot from the server.
+- Disabling supported Bot modules.
+- Removing or changing relevant feature configurations.
+- Contacting us regarding applicable data deletion requests.
+
+## 10. Discord
+
+HOP Bot operates through the Discord platform.
+
+Your use of Discord is also subject to Discord's own Terms of Service and Privacy Policy. HOP Bot does not control information that Discord independently collects or processes through its platform.
+
+## 11. Security
+
+We take reasonable measures to protect information processed and stored by HOP Bot against unauthorized access, modification, disclosure, or destruction.
+
+However, no electronic storage system or method of transmission can be guaranteed to be completely secure.
+
+## 12. Changes to This Privacy Policy
+
+This Privacy Policy may be updated when HOP Bot's features, data practices, or operational requirements change.
+
+The **Last Updated** date will be changed whenever this policy is revised.
+
+## 13. Contact
+
+If you have any questions, concerns, or requests regarding this Privacy Policy or data processed by HOP Bot, please contact us through our official GitHub repository:
+
+https://github.com/joox10/hop-bot

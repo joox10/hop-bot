@@ -1,55 +1,88 @@
-const {
-  SlashCommandBuilder,
-  EmbedBuilder,
-  PermissionsBitField,
-  ActionRowBuilder,
-  ButtonBuilder,
-  MessageComponentCollector,
-  ButtonStyle,
-} = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { Database } = require("st.db");
+
 const applyDB = new Database("/Json-db/Bots/applyDB.json");
 
-
 module.exports = {
-  adminsOnly:true,
-  data: new SlashCommandBuilder()
-    .setName("dm-mode")
-    .setDescription("ارسال رسالة لخاص المتقدم عند الرفض او القبول")
-    .addStringOption((option) =>
-      option
-        .setName("type")
-        .setDescription("تفعيل / تعطيل نظام الخاص")
-        .addChoices(
-        {name : 'تفعيل' , value : 'enable'},
-        {name : 'تعطيل' , value : 'disable'},
-)
-        .setRequired(true)
-    ),
-  async execute(interaction, client) {
-    const sent = await interaction.deferReply({
-      fetchReply: true,
-      ephemeral: false,
-    });
-    let embed1 = new EmbedBuilder()
-      .setFooter({
-        text: interaction.user.username,
-        iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
-      })
-      .setAuthor({
-        name: interaction.guild.name,
-        iconURL: interaction.guild.iconURL({ dynamic: true }),
-      })
-      .setTimestamp(Date.now())
-      .setColor('Grey');
-    let type = interaction.options.getString(`type`);
-    if(type === "enable"){
-        applyDB.set(`dm_${interaction.guild.id}` , true)
-        embed1.setTitle(`**تم تفعيل نظام الخاص**`)
-    }else if(type === "disable"){
-        applyDB.set(`dm_${interaction.guild.id}` , false)
-        embed1.setTitle(`**تم تعطيل نظام الخاص**`)
-    }
-    return interaction.editReply({ embeds: [embed1] });
-  },
+    adminsOnly: true,
+
+    data: new SlashCommandBuilder()
+        .setName("dm-mode")
+        .setDescription("تفعيل أو تعطيل إرسال إشعارات التقديم عبر الخاص")
+        .addStringOption(option =>
+            option
+                .setName("type")
+                .setDescription("اختر حالة نظام الرسائل الخاصة")
+                .addChoices(
+                    { name: "تفعيل", value: "enable" },
+                    { name: "تعطيل", value: "disable" }
+                )
+                .setRequired(true)
+        ),
+
+    async execute(interaction, client) {
+        await interaction.deferReply();
+
+        const guildId = interaction.guild.id;
+        const type = interaction.options.getString("type");
+
+        const currentStatus = await applyDB.get(`dm_${guildId}`);
+
+        const embed = new EmbedBuilder()
+            .setAuthor({
+                name: interaction.guild.name,
+                iconURL: interaction.guild.iconURL({ dynamic: true })
+            })
+            .setFooter({
+                text: `بواسطة ${interaction.user.username}`,
+                iconURL: interaction.user.displayAvatarURL({ dynamic: true })
+            })
+            .setTimestamp();
+
+        if (type === "enable") {
+            if (currentStatus === true) {
+                embed
+                    .setColor("#FEE75C")
+                    .setTitle("⚠️ نظام الرسائل الخاصة مفعّل بالفعل")
+                    .setDescription(
+                        "نظام الرسائل الخاصة مفعّل حاليًا، ولم يتم إجراء أي تغيير."
+                    );
+
+                return interaction.editReply({ embeds: [embed] });
+            }
+
+            await applyDB.set(`dm_${guildId}`, true);
+
+            embed
+                .setColor("#57F287")
+                .setTitle("📩 تم تفعيل الرسائل الخاصة")
+                .setDescription(
+                    "سيتم إرسال إشعارات للمتقدم عبر الرسائل الخاصة عند قبول طلبه أو رفضه."
+                );
+        }
+
+        if (type === "disable") {
+            if (currentStatus === false) {
+                embed
+                    .setColor("#FEE75C")
+                    .setTitle("⚠️ نظام الرسائل الخاصة معطّل بالفعل")
+                    .setDescription(
+                        "نظام الرسائل الخاصة معطّل حاليًا، ولم يتم إجراء أي تغيير."
+                    );
+
+                return interaction.editReply({ embeds: [embed] });
+            }
+
+            await applyDB.set(`dm_${guildId}`, false);
+
+            embed
+                .setColor("#ED4245")
+                .setTitle("📪 تم تعطيل الرسائل الخاصة")
+                .setDescription(
+                    "لن يتم إرسال إشعارات القبول أو الرفض للمتقدم عبر الرسائل الخاصة."
+                );
+        }
+
+        return interaction.editReply({ embeds: [embed] });
+    },
 };
